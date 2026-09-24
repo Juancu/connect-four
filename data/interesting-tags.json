@@ -1,0 +1,1077 @@
+[
+  {
+    "name": "abduction",
+    "slug": "abduction",
+    "namespace": "artwork"
+  },
+  {
+    "name": "abrade",
+    "slug": "abrade",
+    "namespace": "card"
+  },
+  {
+    "name": "abstract elemental",
+    "slug": "abstract-elemental",
+    "namespace": "artwork"
+  },
+  {
+    "name": "activate from graveyard",
+    "slug": "activate-from-graveyard",
+    "namespace": "card"
+  },
+  {
+    "name": "algae",
+    "slug": "algae",
+    "namespace": "artwork"
+  },
+  {
+    "name": "ambush",
+    "slug": "ambush",
+    "namespace": "artwork"
+  },
+  {
+    "name": "anchor",
+    "slug": "anchor",
+    "namespace": "artwork"
+  },
+  {
+    "name": "anger",
+    "slug": "anger",
+    "namespace": "artwork"
+  },
+  {
+    "name": "antenna",
+    "slug": "antenna",
+    "namespace": "artwork"
+  },
+  {
+    "name": "anvil",
+    "slug": "anvil",
+    "namespace": "artwork"
+  },
+  {
+    "name": "apple",
+    "slug": "apple",
+    "namespace": "artwork"
+  },
+  {
+    "name": "arcade (architecture)",
+    "slug": "arcade-architecture",
+    "namespace": "artwork"
+  },
+  {
+    "name": "archaeology",
+    "slug": "archaeology",
+    "namespace": "artwork"
+  },
+  {
+    "name": "arena",
+    "slug": "arena",
+    "namespace": "artwork"
+  },
+  {
+    "name": "arm",
+    "slug": "arm",
+    "namespace": "artwork"
+  },
+  {
+    "name": "arm wrap",
+    "slug": "arm-wrap",
+    "namespace": "artwork"
+  },
+  {
+    "name": "armrest pose",
+    "slug": "armrest-pose",
+    "namespace": "artwork"
+  },
+  {
+    "name": "arms crossed",
+    "slug": "arms-crossed",
+    "namespace": "artwork"
+  },
+  {
+    "name": "artist",
+    "slug": "artist",
+    "namespace": "artwork"
+  },
+  {
+    "name": "audience",
+    "slug": "audience",
+    "namespace": "artwork"
+  },
+  {
+    "name": "aura",
+    "slug": "aura",
+    "namespace": "artwork"
+  },
+  {
+    "name": "baby",
+    "slug": "baby",
+    "namespace": "artwork"
+  },
+  {
+    "name": "backpack",
+    "slug": "backpack",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bad breath",
+    "slug": "bad-breath",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bag",
+    "slug": "bag",
+    "namespace": "artwork"
+  },
+  {
+    "name": "balcony",
+    "slug": "balcony",
+    "namespace": "artwork"
+  },
+  {
+    "name": "balloon",
+    "slug": "balloon",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bamboo",
+    "slug": "bamboo",
+    "namespace": "artwork"
+  },
+  {
+    "name": "banana",
+    "slug": "banana",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bandage",
+    "slug": "bandage",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bandana",
+    "slug": "bandana",
+    "namespace": "artwork"
+  },
+  {
+    "name": "banister",
+    "slug": "banister",
+    "namespace": "artwork"
+  },
+  {
+    "name": "barbarian",
+    "slug": "barbarian",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bard",
+    "slug": "bard",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bare buttock",
+    "slug": "bare-buttock",
+    "namespace": "artwork"
+  },
+  {
+    "name": "barrel",
+    "slug": "barrel",
+    "namespace": "artwork"
+  },
+  {
+    "name": "barrier",
+    "slug": "barrier",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bars",
+    "slug": "bars",
+    "namespace": "artwork"
+  },
+  {
+    "name": "basket",
+    "slug": "basket",
+    "namespace": "artwork"
+  },
+  {
+    "name": "baton",
+    "slug": "baton",
+    "namespace": "artwork"
+  },
+  {
+    "name": "beach",
+    "slug": "beach",
+    "namespace": "artwork"
+  },
+  {
+    "name": "beads",
+    "slug": "beads",
+    "namespace": "artwork"
+  },
+  {
+    "name": "beak",
+    "slug": "beak",
+    "namespace": "artwork"
+  },
+  {
+    "name": "beaker",
+    "slug": "beaker",
+    "namespace": "artwork"
+  },
+  {
+    "name": "beauty mark",
+    "slug": "beauty-mark",
+    "namespace": "artwork"
+  },
+  {
+    "name": "beckon",
+    "slug": "beckon",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bell",
+    "slug": "bell",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bench",
+    "slug": "bench",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bicep",
+    "slug": "bicep",
+    "namespace": "artwork"
+  },
+  {
+    "name": "big eye",
+    "slug": "big-eye",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bioluminescence",
+    "slug": "bioluminescence",
+    "namespace": "artwork"
+  },
+  {
+    "name": "birch",
+    "slug": "birch",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bite mark",
+    "slug": "bite-mark",
+    "namespace": "artwork"
+  },
+  {
+    "name": "black beard",
+    "slug": "black-beard",
+    "namespace": "artwork"
+  },
+  {
+    "name": "black fingernail",
+    "slug": "black-fingernail",
+    "namespace": "artwork"
+  },
+  {
+    "name": "black horse",
+    "slug": "black-horse",
+    "namespace": "artwork"
+  },
+  {
+    "name": "blanket",
+    "slug": "blanket",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bloodshot eye",
+    "slug": "bloodshot-eye",
+    "namespace": "artwork"
+  },
+  {
+    "name": "blushing",
+    "slug": "blushing",
+    "namespace": "artwork"
+  },
+  {
+    "name": "boiler",
+    "slug": "boiler",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bomb",
+    "slug": "bomb",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bondage",
+    "slug": "bondage",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bone weapon",
+    "slug": "bone-weapon",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bones",
+    "slug": "bones",
+    "namespace": "artwork"
+  },
+  {
+    "name": "book-cover",
+    "slug": "book-cover",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bookmark",
+    "slug": "bookmark",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bottle",
+    "slug": "bottle",
+    "namespace": "artwork"
+  },
+  {
+    "name": "boulder",
+    "slug": "boulder",
+    "namespace": "artwork"
+  },
+  {
+    "name": "box",
+    "slug": "box",
+    "namespace": "artwork"
+  },
+  {
+    "name": "brain",
+    "slug": "brain",
+    "namespace": "artwork"
+  },
+  {
+    "name": "breaching",
+    "slug": "breaching",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bread",
+    "slug": "bread",
+    "namespace": "artwork"
+  },
+  {
+    "name": "break",
+    "slug": "break",
+    "namespace": "artwork"
+  },
+  {
+    "name": "brick",
+    "slug": "brick",
+    "namespace": "artwork"
+  },
+  {
+    "name": "brick wall",
+    "slug": "brick-wall",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bridle",
+    "slug": "bridle",
+    "namespace": "artwork"
+  },
+  {
+    "name": "briefcase",
+    "slug": "briefcase",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bronze",
+    "slug": "bronze",
+    "namespace": "artwork"
+  },
+  {
+    "name": "brooch",
+    "slug": "brooch",
+    "namespace": "artwork"
+  },
+  {
+    "name": "broom",
+    "slug": "broom",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bug",
+    "slug": "bug",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bush",
+    "slug": "bush",
+    "namespace": "artwork"
+  },
+  {
+    "name": "bust (perspective)",
+    "slug": "bust-perspective",
+    "namespace": "artwork"
+  },
+  {
+    "name": "butterfly",
+    "slug": "butterfly",
+    "namespace": "artwork"
+  },
+  {
+    "name": "button (clothing)",
+    "slug": "button-clothing",
+    "namespace": "artwork"
+  },
+  {
+    "name": "button (mechanical)",
+    "slug": "button-mechanical",
+    "namespace": "artwork"
+  },
+  {
+    "name": "candlestick",
+    "slug": "candlestick",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cane",
+    "slug": "cane",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cap",
+    "slug": "cap",
+    "namespace": "artwork"
+  },
+  {
+    "name": "capture",
+    "slug": "capture",
+    "namespace": "artwork"
+  },
+  {
+    "name": "carapace",
+    "slug": "carapace",
+    "namespace": "artwork"
+  },
+  {
+    "name": "carcass",
+    "slug": "carcass",
+    "namespace": "artwork"
+  },
+  {
+    "name": "carrot",
+    "slug": "carrot",
+    "namespace": "artwork"
+  },
+  {
+    "name": "caterpillar",
+    "slug": "caterpillar",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cattail",
+    "slug": "cattail",
+    "namespace": "artwork"
+  },
+  {
+    "name": "celebrating",
+    "slug": "celebrating",
+    "namespace": "artwork"
+  },
+  {
+    "name": "censer",
+    "slug": "censer",
+    "namespace": "artwork"
+  },
+  {
+    "name": "ceremony",
+    "slug": "ceremony",
+    "namespace": "artwork"
+  },
+  {
+    "name": "chalice",
+    "slug": "chalice",
+    "namespace": "artwork"
+  },
+  {
+    "name": "chalkboard",
+    "slug": "chalkboard",
+    "namespace": "artwork"
+  },
+  {
+    "name": "chariot",
+    "slug": "chariot",
+    "namespace": "artwork"
+  },
+  {
+    "name": "chasm",
+    "slug": "chasm",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cheering",
+    "slug": "cheering",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cheese",
+    "slug": "cheese",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cherry",
+    "slug": "cherry",
+    "namespace": "artwork"
+  },
+  {
+    "name": "chess",
+    "slug": "chess",
+    "namespace": "artwork"
+  },
+  {
+    "name": "chest",
+    "slug": "chest",
+    "namespace": "artwork"
+  },
+  {
+    "name": "chicken",
+    "slug": "chicken",
+    "namespace": "artwork"
+  },
+  {
+    "name": "choke",
+    "slug": "choke",
+    "namespace": "artwork"
+  },
+  {
+    "name": "circle of people",
+    "slug": "circle-of-people",
+    "namespace": "artwork"
+  },
+  {
+    "name": "city",
+    "slug": "city",
+    "namespace": "artwork"
+  },
+  {
+    "name": "classroom",
+    "slug": "classroom",
+    "namespace": "artwork"
+  },
+  {
+    "name": "claw marks",
+    "slug": "claw-marks",
+    "namespace": "artwork"
+  },
+  {
+    "name": "clear sky",
+    "slug": "clear-sky",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cleric",
+    "slug": "cleric",
+    "namespace": "artwork"
+  },
+  {
+    "name": "clock",
+    "slug": "clock",
+    "namespace": "artwork"
+  },
+  {
+    "name": "closed door",
+    "slug": "closed-door",
+    "namespace": "artwork"
+  },
+  {
+    "name": "club",
+    "slug": "club",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cobblestone",
+    "slug": "cobblestone",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cocoon",
+    "slug": "cocoon",
+    "namespace": "artwork"
+  },
+  {
+    "name": "coin flip",
+    "slug": "coin-flip",
+    "namespace": "card"
+  },
+  {
+    "name": "coin purse",
+    "slug": "coin-purse",
+    "namespace": "artwork"
+  },
+  {
+    "name": "compass",
+    "slug": "compass",
+    "namespace": "artwork"
+  },
+  {
+    "name": "confused",
+    "slug": "confused",
+    "namespace": "artwork"
+  },
+  {
+    "name": "construction",
+    "slug": "construction",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cooking",
+    "slug": "cooking",
+    "namespace": "artwork"
+  },
+  {
+    "name": "coral",
+    "slug": "coral",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cork",
+    "slug": "cork",
+    "namespace": "artwork"
+  },
+  {
+    "name": "corn",
+    "slug": "corn",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cosplay",
+    "slug": "cosplay",
+    "namespace": "artwork"
+  },
+  {
+    "name": "couch",
+    "slug": "couch",
+    "namespace": "artwork"
+  },
+  {
+    "name": "court of law",
+    "slug": "court-of-law",
+    "namespace": "artwork"
+  },
+  {
+    "name": "covering ears",
+    "slug": "covering-ears",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cower",
+    "slug": "cower",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cozy",
+    "slug": "cozy",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crack",
+    "slug": "crack",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cracked stone",
+    "slug": "cracked-stone",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crafting",
+    "slug": "crafting",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crate",
+    "slug": "crate",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cravat",
+    "slug": "cravat",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crawling",
+    "slug": "crawling",
+    "namespace": "artwork"
+  },
+  {
+    "name": "creature mob",
+    "slug": "creature-mob",
+    "namespace": "artwork"
+  },
+  {
+    "name": "creature on shoulder",
+    "slug": "creature-on-shoulder",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crenelation",
+    "slug": "crenelation",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crescent",
+    "slug": "crescent",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crescent moon",
+    "slug": "crescent-moon",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crook",
+    "slug": "crook",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cross-legged",
+    "slug": "cross-legged",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crossbow",
+    "slug": "crossbow",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crow",
+    "slug": "crow",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crumble",
+    "slug": "crumble",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crush",
+    "slug": "crush",
+    "namespace": "artwork"
+  },
+  {
+    "name": "crying",
+    "slug": "crying",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cube",
+    "slug": "cube",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cuneiform",
+    "slug": "cuneiform",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cup",
+    "slug": "cup",
+    "namespace": "artwork"
+  },
+  {
+    "name": "curved horizon",
+    "slug": "curved-horizon",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cushion",
+    "slug": "cushion",
+    "namespace": "artwork"
+  },
+  {
+    "name": "cymbals",
+    "slug": "cymbals",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dabbing",
+    "slug": "dabbing",
+    "namespace": "artwork"
+  },
+  {
+    "name": "daisy",
+    "slug": "daisy",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dance",
+    "slug": "dance",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dangle",
+    "slug": "dangle",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dark cloud",
+    "slug": "dark-cloud",
+    "namespace": "artwork"
+  },
+  {
+    "name": "debris",
+    "slug": "debris",
+    "namespace": "artwork"
+  },
+  {
+    "name": "decorated skull",
+    "slug": "decorated-skull",
+    "namespace": "artwork"
+  },
+  {
+    "name": "desk",
+    "slug": "desk",
+    "namespace": "artwork"
+  },
+  {
+    "name": "detached sleeve",
+    "slug": "detached-sleeve",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dice",
+    "slug": "dice",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dinosaur",
+    "slug": "dinosaur",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dirigible",
+    "slug": "dirigible",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dirt",
+    "slug": "dirt",
+    "namespace": "artwork"
+  },
+  {
+    "name": "disembodied eye",
+    "slug": "disembodied-eye",
+    "namespace": "artwork"
+  },
+  {
+    "name": "disembodied hand",
+    "slug": "disembodied-hand",
+    "namespace": "artwork"
+  },
+  {
+    "name": "disembodied head",
+    "slug": "disembodied-head",
+    "namespace": "artwork"
+  },
+  {
+    "name": "disembodied limb",
+    "slug": "disembodied-limb",
+    "namespace": "artwork"
+  },
+  {
+    "name": "display case",
+    "slug": "display-case",
+    "namespace": "artwork"
+  },
+  {
+    "name": "distortion",
+    "slug": "distortion",
+    "namespace": "artwork"
+  },
+  {
+    "name": "doctor",
+    "slug": "doctor",
+    "namespace": "artwork"
+  },
+  {
+    "name": "document",
+    "slug": "document",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dodging",
+    "slug": "dodging",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dome",
+    "slug": "dome",
+    "namespace": "artwork"
+  },
+  {
+    "name": "don't look down",
+    "slug": "don-t-look-down",
+    "namespace": "artwork"
+  },
+  {
+    "name": "door knocker",
+    "slug": "door-knocker",
+    "namespace": "artwork"
+  },
+  {
+    "name": "doorway light",
+    "slug": "doorway-light",
+    "namespace": "artwork"
+  },
+  {
+    "name": "doppelgänger",
+    "slug": "doppelganger",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dragon bone",
+    "slug": "dragon-bone",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drawer",
+    "slug": "drawer",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drawing",
+    "slug": "drawing",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dream",
+    "slug": "dream",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dress",
+    "slug": "dress",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drill",
+    "slug": "drill",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drink",
+    "slug": "drink",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drinking",
+    "slug": "drinking",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drool",
+    "slug": "drool",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drop of water",
+    "slug": "drop-of-water",
+    "namespace": "artwork"
+  },
+  {
+    "name": "drowning",
+    "slug": "drowning",
+    "namespace": "artwork"
+  },
+  {
+    "name": "druid",
+    "slug": "druid",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dry grass",
+    "slug": "dry-grass",
+    "namespace": "artwork"
+  },
+  {
+    "name": "duel",
+    "slug": "duel",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dungeon",
+    "slug": "dungeon",
+    "namespace": "artwork"
+  },
+  {
+    "name": "dust",
+    "slug": "dust",
+    "namespace": "artwork"
+  },
+  {
+    "name": "ears covered",
+    "slug": "ears-covered",
+    "namespace": "artwork"
+  },
+  {
+    "name": "egg",
+    "slug": "egg",
+    "namespace": "artwork"
+  },
+  {
+    "name": "eight figures",
+    "slug": "eight-figures",
+    "namespace": "artwork"
+  },
+  {
+    "name": "electric guitar",
+    "slug": "electric-guitar",
+    "namespace": "artwork"
+  },
+  {
+    "name": "electric lamp",
+    "slug": "electric-lamp",
+    "namespace": "artwork"
+  },
+  {
+    "name": "elephant",
+    "slug": "elephant",
+    "namespace": "artwork"
+  },
+  {
+    "name": "ember",
+    "slug": "ember",
+    "namespace": "artwork"
+  },
+  {
+    "name": "emoji",
+    "slug": "emoji",
+    "namespace": "artwork"
+  },
+  {
+    "name": "energy blade",
+    "slug": "energy-blade",
+    "namespace": "artwork"
+  },
+  {
+    "name": "energy tank",
+    "slug": "energy-tank",
+    "namespace": "artwork"
+  },
+  {
+    "name": "engine",
+    "slug": "engine",
+    "namespace": "artwork"
+  },
+  {
+    "name": "engraving",
+    "slug": "engraving",
+    "namespace": "artwork"
+  },
+  {
+    "name": "engulfed in flames",
+    "slug": "engulfed-in-flames",
+    "namespace": "artwork"
+  }
+]

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>connectTag puzzle</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #141311;
+      --ink: #f6f1e7;
+      --muted: #b7b0a4;
+      --tile: #2c2823;
+      --line: #3c3832;
+      --gold: #f0c14b;
+      --red: #e15b5b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.4 "Segoe UI", system-ui, sans-serif;
+    }
+
+    main {
+      width: min(760px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+      text-align: center;
+    }
+
+    .intro {
+      margin: 0 0 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    #message {
+      min-height: 1.4em;
+      margin: 0 0 12px;
+      text-align: center;
+      font-weight: 650;
+    }
+
+    #solved {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    #solved:empty { margin: 0; }
+
+    .solved-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #221f1b;
+    }
+
+    .solved-row img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 571 / 460;
+      object-fit: contain;
+    }
+
+    .solved-row strong {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      background: rgba(12, 10, 8, 0.62);
+      color: white;
+      font-size: clamp(20px, 4vw, 32px);
+      letter-spacing: -0.02em;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .tile-wrap { position: relative; }
+
+    .tile {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 3px solid transparent;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--tile);
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+    }
+
+    .tile img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 571 / 460;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .tile[aria-pressed="true"] { border-color: var(--gold); }
+
+    .tile.is-wrong { border-color: var(--red); }
+
+    .loupe {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(20, 19, 17, 0.82);
+      color: white;
+      display: grid;
+      place-items: center;
+      cursor: zoom-in;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .tile-wrap.is-loupe .loupe {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #zoom {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background: rgba(8, 7, 6, 0.92);
+      cursor: zoom-out;
+    }
+
+    #zoom[hidden] { display: none; }
+
+    #zoom img {
+      max-width: min(1100px, 100%);
+      max-height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .zoom-prev,
+    .zoom-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 76px;
+      border: 0;
+      border-radius: 12px;
+      background: rgba(20, 19, 17, 0.78);
+      color: white;
+      font: 40px/1 "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+    }
+
+    .zoom-prev { left: 12px; }
+    .zoom-next { right: 12px; }
+
+    .mistakes {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin: 16px 0 12px;
+      color: var(--muted);
+    }
+
+    .dots { display: flex; gap: 8px; }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #6f6a62;
+    }
+
+    .dot.is-wrong { background: var(--red); }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .actions button {
+      min-width: 128px;
+      height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #221f1b;
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    #submit:not(:disabled) {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #1c160b;
+      font-weight: 700;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>connectTag</h1>
+    <p class="intro">Find the four pictures that share a tag. Select four, then submit.</p>
+    <p id="message" role="status"></p>
+    <div id="board">
+      <div id="solved"></div>
+      <div id="grid"></div>
+    </div>
+    <div class="mistakes">
+      <span>Mistakes remaining</span>
+      <span class="dots" aria-hidden="true">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </span>
+    </div>
+    <div class="actions">
+      <button type="button" id="shuffle">Shuffle</button>
+      <button type="button" id="deselect">Deselect all</button>
+      <button type="button" id="submit" disabled>Submit</button>
+    </div>
+    <footer>Another puzzle: npm run puzzle</footer>
+  </main>
+  <div id="zoom" hidden>
+    <button type="button" class="zoom-prev" aria-label="Previous picture">‹</button>
+    <img alt="">
+    <button type="button" class="zoom-next" aria-label="Next picture">›</button>
+  </div>
+  <script id="puzzle-data" type="application/json">__PUZZLE_DATA__</script>
+  <script>
+/*__CLIENT__*/
+  </script>
+  __DISCORD__
+</body>
+</html>

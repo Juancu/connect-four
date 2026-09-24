@@ -1,0 +1,15 @@
+{
+  "name": "connecttag",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A Connections-style picture game built from Scryfall Tagger groups.",
+  "scripts": {
+    "fetch:tags": "node scripts/fetch-tags.mjs",
+    "build:picker": "node scripts/build-tag-picker.mjs",
+    "puzzle": "node scripts/build-puzzle.mjs",
+    "daily": "node scripts/build-daily.mjs",
+    "mine": "node scripts/mine-artwork.mjs",
+    "build:designer": "node scripts/build-designer.mjs"
+  }
+}

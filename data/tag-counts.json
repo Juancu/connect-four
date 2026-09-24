@@ -1,0 +1,22 @@
+{
+  "fetchedAt": "2026-09-24T02:55:54.145Z",
+  "count": 16301,
+  "totalReported": 16301,
+  "duplicateIdsSkipped": 0,
+  "byNamespace": {
+    "artwork": 11603,
+    "card": 4557,
+    "print": 141
+  },
+  "byType": {
+    "ILLUSTRATION_TAG": 11603,
+    "ORACLE_CARD_TAG": 4557,
+    "PRINTING_TAG": 141
+  },
+  "byStatus": {
+    "GOOD_STANDING": 16301
+  },
+  "categories": 165,
+  "withDescription": 3287,
+  "withExemplaryTagging": 3226
+}

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>connectTag — pick tags</title>
+  <style>
+    :root {
+      --bg: #f3f0e8;
+      --paper: #fffdf8;
+      --ink: #1d1a16;
+      --muted: #6d675e;
+      --line: #e3ddd2;
+      --accent: #1f6b3a;
+      --accent-ink: #ffffff;
+      --picked: #e5f3dc;
+      --picked-bar: #2f7d32;
+      --toolbar-h: 168px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font: 15px/1.4 "Segoe UI", system-ui, sans-serif;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 20px 14px;
+    }
+
+    .toolbar-inner,
+    .table-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    input[type="search"] {
+      flex: 1 1 220px;
+      min-width: 180px;
+      height: 36px;
+      padding: 0 10px;
+      border: 1px solid #cfc6b8;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    button,
+    .filters button {
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid #cfc6b8;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button[aria-pressed="true"],
+    th button.is-active {
+      border-color: #1d1a16;
+      background: #1d1a16;
+      color: #fff;
+    }
+
+    button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 600;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .spacer { flex: 1 1 8px; }
+
+    .meta {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #status:empty { display: none; }
+
+    #status {
+      margin: 8px 0 0;
+      min-height: 1.2em;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .table-wrap { padding: 8px 20px 40px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    thead th {
+      position: sticky;
+      top: var(--toolbar-h);
+      z-index: 2;
+      padding: 0;
+      background: #f7f4ee;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    thead th button {
+      width: 100%;
+      height: 40px;
+      border: 0;
+      border-radius: 0;
+      background: #f7f4ee;
+      text-align: left;
+      font: inherit;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: inherit;
+    }
+
+    thead th button.is-active {
+      background: #1d1a16;
+      color: #fff;
+    }
+
+    thead th button[data-sort="count"] { text-align: right; }
+
+    thead th.static {
+      padding: 0 10px;
+    }
+
+    tbody td {
+      padding: 8px 10px;
+      border-top: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    tbody tr { cursor: pointer; }
+
+    tbody tr.is-selected td { background: var(--picked); }
+
+    tbody tr.is-selected td:first-child {
+      box-shadow: inset 3px 0 0 var(--picked-bar);
+    }
+
+    tbody tr.is-last td.name::after {
+      content: " · last";
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    td.name { font-weight: 600; width: 240px; }
+
+    td.count {
+      width: 72px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    td.description { color: #3f3a34; }
+    td.description.is-empty { color: #b0a89c; }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: lowercase;
+    }
+
+    .pill-artwork { background: #e3eef5; color: #1d4e6e; }
+    .pill-card { background: #f6ead8; color: #6d4516; }
+    .pill-print { background: #ece6f4; color: #4c3d68; }
+
+    a {
+      color: #1d4e6e;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    #empty {
+      margin: 16px 0;
+      color: var(--muted);
+    }
+
+    #json-out {
+      display: block;
+      width: min(1120px, calc(100% - 40px));
+      height: 220px;
+      margin: 0 auto 32px;
+      padding: 10px;
+      border: 1px solid #cfc6b8;
+      border-radius: 8px;
+      font: 12px/1.45 Consolas, ui-monospace, monospace;
+    }
+
+    #json-out[hidden] { display: none; }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <h1>Pick tags</h1>
+      <p class="lead"><span id="total">…</span> tags with 9–200 taggings. Click a row to mark it. Marked rows stay highlighted in this browser. Copy JSON copies just the names.</p>
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search name or description" autocomplete="off">
+        <button type="button" data-namespace="all" data-label="All" aria-pressed="true">All</button>
+        <button type="button" data-namespace="artwork" data-label="Artwork" aria-pressed="false">Artwork</button>
+        <button type="button" data-namespace="card" data-label="Card" aria-pressed="false">Card</button>
+        <button type="button" data-namespace="print" data-label="Print" aria-pressed="false">Print</button>
+        <button type="button" id="selected-only" aria-pressed="false">Picked only</button>
+        <span class="spacer"></span>
+        <span id="showing" class="meta"></span>
+        <span id="picked" class="meta"></span>
+        <span id="last-picked" class="meta"></span>
+        <button type="button" id="clear">Clear</button>
+        <button type="button" id="copy" class="primary">Copy JSON</button>
+      </div>
+      <p id="status" role="status"></p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <p id="empty" hidden>No tags match.</p>
+    <table>
+      <thead>
+        <tr>
+          <th class="static" scope="col"></th>
+          <th scope="col" aria-sort="ascending"><button type="button" data-sort="name">Name</button></th>
+          <th class="static" scope="col">Kind</th>
+          <th scope="col" aria-sort="none"><button type="button" data-sort="count">Tagged</button></th>
+          <th class="static" scope="col">Description</th>
+          <th class="static" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody id="tags"></tbody>
+    </table>
+  </div>
+  <textarea id="json-out" hidden readonly></textarea>
+  <script id="saved-picks" type="application/json">__SAVED_PICKS__</script>
+  <script id="tag-data" type="application/json">__TAG_DATA__</script>
+  <script>
+/*__CLIENT__*/
+  </script>
+  <script>
+    const toolbar = document.querySelector(".toolbar");
+    const syncToolbarHeight = () => {
+      document.documentElement.style.setProperty("--toolbar-h", `${toolbar.offsetHeight}px`);
+    };
+    syncToolbarHeight();
+    window.addEventListener("resize", syncToolbarHeight);
+  </script>
+</body>
+</html>

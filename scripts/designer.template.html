@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>connectTag — daily puzzle</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #141311;
+      --ink: #f6f1e7;
+      --muted: #b7b0a4;
+      --gold: #f0c14b;
+      --panel: #221f1b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.4 "Segoe UI", system-ui, sans-serif;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 22px;
+      background: rgba(20, 19, 17, 0.94);
+      border-bottom: 1px solid #3c3832;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .toolbar p {
+      margin: 2px 0 0;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button.primary {
+      height: 40px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--gold);
+      color: #1c160b;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin: 0;
+      color: var(--gold);
+      font-weight: 650;
+    }
+
+    #status:empty { display: none; }
+
+    main { padding: 8px 0 48px; }
+
+    .category { margin: 0 0 18px; }
+
+    .category-head {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 0 22px 8px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .category-head span {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 22px 10px;
+    }
+
+    .shot {
+      flex: 0 0 auto;
+      padding: 0;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--panel);
+      cursor: pointer;
+    }
+
+    .shot img {
+      display: block;
+      height: 148px;
+      width: auto;
+      aspect-ratio: 571 / 460;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .shot[aria-pressed="true"] { border-color: var(--gold); }
+
+    .empty { padding: 24px 22px; color: var(--muted); }
+
+    #json-out {
+      display: block;
+      width: min(900px, calc(100% - 44px));
+      height: 220px;
+      margin: 8px 22px 24px;
+      font: 12px/1.45 Consolas, ui-monospace, monospace;
+    }
+
+    #json-out[hidden] { display: none; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div>
+      <h1>Daily puzzle</h1>
+      <p>Click 4 pictures in each category you want. Export copies the selection.</p>
+    </div>
+    <div class="actions">
+      <span id="summary"></span>
+      <button type="button" id="export" class="primary">Export</button>
+    </div>
+  </div>
+  <p id="status" role="status"></p>
+  <main>
+    <div id="categories"></div>
+    <textarea id="json-out" hidden readonly></textarea>
+  </main>
+  <script id="designer-data" type="application/json">__DESIGNER_DATA__</script>
+  <script>
+/*__CLIENT__*/
+  </script>
+</body>
+</html>
