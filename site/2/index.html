@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>connectTag #002</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #141311;
+      --ink: #f6f1e7;
+      --muted: #b7b0a4;
+      --tile: #2c2823;
+      --line: #3c3832;
+      --gold: #f0c14b;
+      --red: #e15b5b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.4 "Segoe UI", system-ui, sans-serif;
+    }
+
+    main {
+      width: min(760px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+      text-align: center;
+    }
+
+    .intro {
+      margin: 0 0 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .info {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      margin-left: 6px;
+      padding: 0;
+      border: 1.5px solid var(--muted);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--muted);
+      font: italic 600 13px/1 Georgia, "Times New Roman", serif;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    .info:hover,
+    .info:focus-visible {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    #info-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(8, 7, 6, 0.72);
+    }
+
+    #info-layer[hidden] { display: none; }
+
+    .info-card {
+      position: relative;
+      width: min(460px, 100%);
+      padding: 36px 22px 22px;
+      border-radius: 16px;
+      background: #221f1b;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      text-align: left;
+    }
+
+    .info-card p {
+      margin: 0 0 12px;
+    }
+
+    .info-card p:last-child { margin-bottom: 0; }
+
+    #message {
+      min-height: 1.4em;
+      margin: 0 0 12px;
+      text-align: center;
+      font-weight: 650;
+    }
+
+    #solved {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    #solved:empty { margin: 0; }
+
+    .solved-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #221f1b;
+    }
+
+    .solved-cell img,
+    .solved-row img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 571 / 460;
+      object-fit: contain;
+    }
+
+    .solved-row.is-flying {
+      z-index: 3;
+      overflow: visible;
+    }
+
+    .solved-row strong {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      background: rgba(12, 10, 8, 0.62);
+      color: white;
+      font-size: clamp(20px, 4vw, 32px);
+      letter-spacing: -0.02em;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      transition: opacity 360ms ease;
+    }
+
+    .solved-row.is-pending strong { opacity: 0; }
+    .solved-row.is-pending strong.is-shown { opacity: 1; }
+
+    #grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .tile-wrap { position: relative; }
+    .tile-wrap.is-jump,
+    .tile-wrap.is-shake { z-index: 2; }
+
+    .tile {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 3px solid transparent;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--tile);
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+    }
+
+    .tile img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 571 / 460;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .tile[aria-pressed="true"] { border-color: var(--gold); }
+
+    .tile.is-wrong { border-color: var(--red); }
+
+    .tile-wrap.is-jump .tile {
+      animation: tile-jump 320ms cubic-bezier(.2, .7, .3, 1);
+    }
+
+    .tile-wrap.is-shake .tile {
+      animation: tile-shake 800ms ease-in-out;
+    }
+
+    @keyframes tile-jump {
+      0% { transform: translateY(0); }
+      38% { transform: translateY(-22px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes tile-shake {
+      0%, 100% { transform: translateX(0); }
+      16% { transform: translateX(-12px); }
+      32% { transform: translateX(11px); }
+      48% { transform: translateX(-9px); }
+      64% { transform: translateX(8px); }
+      80% { transform: translateX(-4px); }
+    }
+
+    #board.is-recalling .tile-wrap.is-dimmed,
+    #board.is-recalling .solved-cell.is-dimmed {
+      opacity: 0.34;
+    }
+
+    #board.is-recalling .tile-wrap.is-recalled { z-index: 2; }
+
+    #board.is-recalling .tile-wrap.is-recalled .tile {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(240, 193, 75, 0.55);
+    }
+
+    #board.is-recalling .solved-cell.is-recalled img {
+      filter: brightness(1.18);
+    }
+
+    .recall-frame {
+      position: absolute;
+      z-index: 3;
+      box-shadow: inset 0 0 0 4px var(--gold);
+      pointer-events: none;
+    }
+
+    .loupe {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(20, 19, 17, 0.82);
+      color: white;
+      display: grid;
+      place-items: center;
+      cursor: zoom-in;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .tile-wrap.is-loupe .loupe {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #zoom {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background: rgba(8, 7, 6, 0.92);
+      cursor: zoom-out;
+    }
+
+    #zoom[hidden] { display: none; }
+
+    #zoom img {
+      max-width: min(1100px, 100%);
+      max-height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .zoom-prev,
+    .zoom-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 76px;
+      border: 0;
+      border-radius: 12px;
+      background: rgba(20, 19, 17, 0.78);
+      color: white;
+      font: 40px/1 "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+    }
+
+    .zoom-prev { left: 12px; }
+    .zoom-next { right: 12px; }
+
+    .notice {
+      margin: 0;
+      padding: 10px 16px;
+      border-radius: 14px;
+      background: var(--gold);
+      color: #1c160b;
+      font-weight: 750;
+      text-align: center;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      pointer-events: none;
+    }
+
+    #toast {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      z-index: 6;
+      display: grid;
+      gap: 2px;
+      transform: translateX(-50%);
+    }
+
+    #toast[hidden] { display: none; }
+
+    .mistakes {
+      position: relative;
+      z-index: 7;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin: 16px 0 12px;
+      color: var(--muted);
+    }
+
+    .notice-above {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: calc(100vw - 24px);
+      font-size: 14px;
+    }
+
+    .dots { display: flex; gap: 2px; }
+
+    .dot {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: inherit;
+    }
+
+    .dot::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 7px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #6f6a62;
+    }
+
+    .dot.is-wrong::before { background: var(--red); }
+    .dot.is-close::before { background: var(--gold); }
+
+    .dot.has-attempt { cursor: pointer; }
+
+    .dot.has-attempt:hover::before,
+    .dot.has-attempt:focus-visible::before {
+      box-shadow: 0 0 0 2px var(--ink);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .actions button {
+      min-width: 128px;
+      height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #221f1b;
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    #submit:not(:disabled),
+    #results,
+    #share {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #1c160b;
+      font-weight: 700;
+    }
+
+    #share {
+      min-width: 200px;
+      height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border-style: solid;
+      border-width: 1px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #results-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(8, 7, 6, 0.72);
+    }
+
+    #results-layer[hidden] { display: none; }
+
+    .results-card {
+      position: relative;
+      width: min(420px, 100%);
+      padding: 28px 22px 22px;
+      border-radius: 16px;
+      background: #221f1b;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      text-align: center;
+    }
+
+    .results-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      min-width: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink);
+      font: 24px/1 "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+    }
+
+    .results-card h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .results-number {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .results-grid {
+      margin: 16px 0 18px;
+      font-size: 28px;
+      line-height: 1.35;
+      letter-spacing: 0.06em;
+      white-space: pre;
+    }
+
+    .share-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .copied {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%) translateY(4px);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #1c160b;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .copied.is-shown {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <p id="toast" class="notice" hidden></p>
+  <main>
+    
+    <p class="intro">Group four arts that share a Scryfall art tag. <button type="button" class="info" id="info" aria-label="More information">i</button></p>
+    <p id="message" role="status"></p>
+    <div id="board">
+      <div id="solved"></div>
+      <div id="grid"></div>
+    </div>
+    <div class="mistakes">
+      <p id="close-tip" class="notice notice-above" hidden>So close! Three are matching!</p>
+      <span>Mistakes remaining</span>
+      <span class="dots">
+        <button type="button" class="dot" aria-label="Mistake 1"></button>
+        <button type="button" class="dot" aria-label="Mistake 2"></button>
+        <button type="button" class="dot" aria-label="Mistake 3"></button>
+        <button type="button" class="dot" aria-label="Mistake 4"></button>
+      </span>
+    </div>
+    <div class="actions">
+      <button type="button" id="shuffle">Shuffle</button>
+      <button type="button" id="deselect">Deselect all</button>
+      <button type="button" id="submit" disabled>Submit</button>
+      <button type="button" id="results" hidden>View Results</button>
+    </div>
+    <footer></footer>
+  </main>
+  <div id="info-layer" hidden>
+    <div class="info-card" role="dialog" aria-modal="true" aria-label="More information">
+      <button type="button" class="results-close" id="info-close" aria-label="Close">×</button>
+      <p>No mechanical knowledge needed (you don't need to know the card titles, attributes, or whether they are in-universe or beyond.)</p>
+      <p>No meta attributes either (the artist, art medium, or style.)</p>
+      <p>Hover on a card for Zoom-in to appear.</p>
+    </div>
+  </div>
+  <div id="results-layer" hidden>
+    <div class="results-card" role="dialog" aria-modal="true" aria-labelledby="results-heading">
+      <button type="button" class="results-close" aria-label="Close">×</button>
+      <h2 id="results-heading">Tagger Connections</h2>
+      <p class="results-number"></p>
+      <div class="results-grid"></div>
+      <div class="share-wrap">
+        <span class="copied" role="status">Copied to Clipboard!</span>
+        <button type="button" id="share">Share Your Results</button>
+      </div>
+    </div>
+  </div>
+  <div id="zoom" hidden>
+    <button type="button" class="zoom-prev" aria-label="Previous picture">‹</button>
+    <img alt="">
+    <button type="button" class="zoom-next" aria-label="Next picture">›</button>
+  </div>
+  <script id="puzzle-data" type="application/json">{"number":2,"groups":[{"id":"eight-figures","name":"Eight Figures","cards":[{"id":"0bed0f9e-ec59-4e68-82c8-04589adc3448","src":"../images/0bed0f9e-ec59-4e68-82c8-04589adc3448.jpg"},{"id":"d23ee00c-f300-4e22-b245-4239cc45be55","src":"../images/d23ee00c-f300-4e22-b245-4239cc45be55.jpg"},{"id":"11812b67-d255-4582-891c-a3e12349881a","src":"../images/11812b67-d255-4582-891c-a3e12349881a.jpg"},{"id":"ba8aa766-530d-4c24-b274-facc7a634102","src":"../images/ba8aa766-530d-4c24-b274-facc7a634102.jpg"}]},{"id":"electric-guitar","name":"Electric Guitar","cards":[{"id":"bdd9dc23-2519-41f4-9613-93221adaac66","src":"../images/bdd9dc23-2519-41f4-9613-93221adaac66.jpg"},{"id":"03e6479f-0d9f-431c-b6fa-6a6544f98440","src":"../images/03e6479f-0d9f-431c-b6fa-6a6544f98440.jpg"},{"id":"bbce166f-9ce4-4342-a533-c4c57456a2bf","src":"../images/bbce166f-9ce4-4342-a533-c4c57456a2bf.jpg"},{"id":"e0529f04-7399-49a1-a72f-80876de27e28","src":"../images/e0529f04-7399-49a1-a72f-80876de27e28.jpg"}]},{"id":"elephant","name":"Elephant","cards":[{"id":"021eecb1-5a4a-4bb7-be48-f2fd87e433f0","src":"../images/021eecb1-5a4a-4bb7-be48-f2fd87e433f0.jpg"},{"id":"7261a641-1d08-4786-91a2-7216a22b9a12","src":"../images/7261a641-1d08-4786-91a2-7216a22b9a12.jpg"},{"id":"b79ba742-3835-45a6-b2fe-f98381dd0bf1","src":"../images/b79ba742-3835-45a6-b2fe-f98381dd0bf1.jpg"},{"id":"5429f243-98ec-41d2-bdb8-330fd3ef7233","src":"../images/5429f243-98ec-41d2-bdb8-330fd3ef7233.jpg"}]},{"id":"engine","name":"Engine","cards":[{"id":"572a46be-e43c-4ab9-9309-2b9ae79f99aa","src":"../images/572a46be-e43c-4ab9-9309-2b9ae79f99aa.jpg"},{"id":"3c55c193-82f5-441f-a511-297696fb6196","src":"../images/3c55c193-82f5-441f-a511-297696fb6196.jpg"},{"id":"19f7bc4a-9a50-405e-ae64-f4aac280ed84","src":"../images/19f7bc4a-9a50-405e-ae64-f4aac280ed84.jpg"},{"id":"4ce8cd32-253e-4557-9391-39c3a4e2c5aa","src":"../images/4ce8cd32-253e-4557-9391-39c3a4e2c5aa.jpg"}]}]}</script>
+  <script>
+const puzzle = JSON.parse(document.getElementById("puzzle-data").textContent);
+
+const board = document.querySelector("#board");
+const solvedRows = document.querySelector("#solved");
+const grid = document.querySelector("#grid");
+const dots = [...document.querySelectorAll(".dot")];
+const message = document.querySelector("#message");
+const toast = document.querySelector("#toast");
+const closeTip = document.querySelector("#close-tip");
+const shuffleButton = document.querySelector("#shuffle");
+const deselectButton = document.querySelector("#deselect");
+const submitButton = document.querySelector("#submit");
+const resultsButton = document.querySelector("#results");
+const resultsLayer = document.querySelector("#results-layer");
+const infoLayer = document.querySelector("#info-layer");
+const resultsNumber = document.querySelector(".results-number");
+const resultsGrid = document.querySelector(".results-grid");
+const shareButton = document.querySelector("#share");
+const copiedNote = document.querySelector(".copied");
+
+const cards = new Map();
+for (const group of puzzle.groups) {
+  for (const card of group.cards) {
+    cards.set(card.id, { ...card, groupId: group.id });
+  }
+}
+
+let unsolved = shuffle([...cards.keys()]);
+const selected = [];
+const solved = [];
+const attempts = [];
+const guesses = [];
+const JUMP_MS = 320;
+const SUSPENSE_MS = 480;
+const SHAKE_MS = 800;
+const FLY_MS = 780;
+const puzzleNumber = String(puzzle.number ?? 1).padStart(3, "0");
+const categoryEmoji = ["🟩", "🟦", "🟨", "🟪"];
+let mistakes = 0;
+let ended = false;
+let busy = false;
+let wrongIds = new Set();
+let recallIndex = -1;
+let lastPointer = "mouse";
+const motionOk = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function shuffle(list) {
+  const copy = [...list];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swap = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swap]] = [copy[swap], copy[index]];
+  }
+  return copy;
+}
+
+function groupById(id) {
+  return puzzle.groups.find((group) => group.id === id);
+}
+
+function isSelected(id) {
+  return selected.includes(id);
+}
+
+function selectedGroup() {
+  if (selected.length !== 4) return null;
+  return puzzle.groups.find((group) => group.cards.every((card) => isSelected(card.id))) ?? null;
+}
+
+function isOneAway(ids) {
+  const counts = new Map();
+  for (const id of ids) {
+    const groupId = cards.get(id).groupId;
+    counts.set(groupId, (counts.get(groupId) ?? 0) + 1);
+  }
+  return [...counts.values()].includes(3);
+}
+
+let toastTimer = 0;
+function hideToast() {
+  clearTimeout(toastTimer);
+  toast.hidden = true;
+}
+
+function showToast(lines) {
+  toast.replaceChildren();
+  for (const line of lines) {
+    const row = document.createElement("span");
+    row.textContent = line;
+    toast.append(row);
+  }
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.hidden = true;
+  }, 3000);
+}
+
+function emojiFor(id) {
+  const index = puzzle.groups.findIndex((group) => group.id === cards.get(id).groupId);
+  const rank = Number(puzzle.groups[index]?.difficulty);
+  const colorIndex = rank >= 1 && rank <= 4 ? rank - 1 : index;
+  return categoryEmoji[colorIndex] ?? "⬜";
+}
+
+function resultsText() {
+  const rows = guesses.map((guess) => guess.map(emojiFor).join("")).join("\n");
+  return `Tagger Connections\nPuzzle #${puzzleNumber}\n${rows}`;
+}
+
+function render({ pendingTitleId = null } = {}) {
+  solvedRows.replaceChildren();
+  const shown = [...solved];
+  if (ended && ended !== "won") {
+    for (const group of puzzle.groups) {
+      if (!shown.includes(group.id)) shown.push(group.id);
+    }
+  }
+  for (const groupId of shown) {
+    const group = groupById(groupId);
+    const row = document.createElement("div");
+    row.className = "solved-row";
+    if (groupId === pendingTitleId) row.classList.add("is-pending", "is-flying");
+    for (const card of group.cards) {
+      const cell = document.createElement("div");
+      cell.className = "solved-cell";
+      cell.dataset.id = card.id;
+      cell.append(picture(card.src));
+      row.append(cell);
+    }
+    const title = document.createElement("strong");
+    title.textContent = group.name;
+    if (groupId === pendingTitleId) title.setAttribute("aria-hidden", "true");
+    row.append(title);
+    solvedRows.append(row);
+  }
+
+  grid.replaceChildren();
+  if (ended) {
+    grid.hidden = true;
+  } else {
+    grid.hidden = false;
+    for (const id of unsolved) {
+      const card = cards.get(id);
+      const wrap = document.createElement("div");
+      wrap.className = "tile-wrap";
+      wrap.dataset.id = id;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "tile";
+      if (wrongIds.has(id)) button.classList.add("is-wrong");
+      button.setAttribute("aria-pressed", String(isSelected(id)));
+      button.append(picture(card.src));
+      button.addEventListener("click", () => {
+        if (suppressClick) {
+          suppressClick = false;
+          return;
+        }
+        toggle(id);
+      });
+      button.addEventListener("contextmenu", (event) => event.preventDefault());
+      button.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" || ended || busy) return;
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const hold = setTimeout(() => {
+          suppressClick = true;
+          openZoom(id);
+        }, 500);
+        const cancelHold = (move) => {
+          if (move?.type === "pointermove" && Math.hypot(move.clientX - startX, move.clientY - startY) < 12) return;
+          clearTimeout(hold);
+          button.removeEventListener("pointermove", cancelHold);
+          button.removeEventListener("pointerup", cancelHold);
+          button.removeEventListener("pointercancel", cancelHold);
+        };
+        button.addEventListener("pointermove", cancelHold);
+        button.addEventListener("pointerup", cancelHold);
+        button.addEventListener("pointercancel", cancelHold);
+      });
+      wrap.append(button, loupeButton(id));
+      wrap.addEventListener("pointerenter", () => {
+        if (busy) return;
+        wrap.classList.add("is-loupe");
+      });
+      wrap.addEventListener("pointerleave", () => {
+        wrap.classList.remove("is-loupe");
+      });
+      grid.append(wrap);
+    }
+  }
+
+  paintDots();
+
+  if (pendingTitleId) message.textContent = "";
+  else if (ended === "won") message.textContent = "You found all four groups.";
+  else if (ended === "lost") message.textContent = "Five mistakes. The groups are shown above.";
+  else if (wrongIds.size) message.textContent = "That isn’t one of the groups.";
+  else message.textContent = "";
+
+  shuffleButton.disabled = ended || unsolved.length < 2;
+  deselectButton.disabled = ended || selected.length === 0;
+  submitButton.disabled = ended || busy || selected.length !== 4;
+  setFinished(Boolean(ended) && !pendingTitleId);
+  if (!pendingTitleId) applyRecall();
+}
+
+const zoom = document.querySelector("#zoom");
+const zoomImage = zoom.querySelector("img");
+let suppressClick = false;
+let zoomIds = [];
+let zoomIndex = 0;
+let zoomSwipe = null;
+
+function showZoom() {
+  if (!zoomIds.length) {
+    closeZoom();
+    return;
+  }
+  zoomIndex = (zoomIndex + zoomIds.length) % zoomIds.length;
+  zoomImage.src = cards.get(zoomIds[zoomIndex]).src;
+  zoom.hidden = false;
+}
+
+function openZoom(id) {
+  zoomIds = [...unsolved];
+  zoomIndex = Math.max(0, zoomIds.indexOf(id));
+  showZoom();
+}
+
+function stepZoom(delta) {
+  zoomIndex += delta;
+  showZoom();
+}
+
+function closeZoom() {
+  zoom.hidden = true;
+  zoomImage.removeAttribute("src");
+  zoomIds = [];
+  zoomSwipe = null;
+}
+
+zoom.addEventListener("pointerdown", (event) => {
+  if (event.target.closest(".zoom-prev, .zoom-next")) return;
+  zoomSwipe = { x: event.clientX, y: event.clientY };
+});
+
+zoom.addEventListener("pointerup", (event) => {
+  if (event.target.closest(".zoom-prev, .zoom-next") || !zoomSwipe) return;
+  const dx = event.clientX - zoomSwipe.x;
+  const dy = event.clientY - zoomSwipe.y;
+  zoomSwipe = null;
+  if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
+    stepZoom(dx < 0 ? 1 : -1);
+    return;
+  }
+  closeZoom();
+});
+
+document.querySelector(".zoom-prev").addEventListener("click", (event) => {
+  event.stopPropagation();
+  stepZoom(-1);
+});
+document.querySelector(".zoom-next").addEventListener("click", (event) => {
+  event.stopPropagation();
+  stepZoom(1);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!infoLayer.hidden && event.key === "Escape") {
+    closeInfo();
+    return;
+  }
+  if (!resultsLayer.hidden && event.key === "Escape") {
+    closeResults();
+    return;
+  }
+  if (zoom.hidden) return;
+  if (event.key === "Escape") closeZoom();
+  if (event.key === "ArrowLeft") stepZoom(-1);
+  if (event.key === "ArrowRight") stepZoom(1);
+});
+
+function loupeButton(id) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "loupe";
+  button.setAttribute("aria-label", "Zoom picture");
+  button.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.2 15.2 L20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openZoom(id);
+  });
+  return button;
+}
+function picture(src) {
+  const image = document.createElement("img");
+  image.src = src;
+  image.alt = "";
+  image.draggable = false;
+  return image;
+}
+
+function paintDots() {
+  dots.forEach((dot, index) => {
+    const attempt = attempts[index];
+    dot.classList.toggle("is-wrong", Boolean(attempt) && !attempt.close);
+    dot.classList.toggle("is-close", Boolean(attempt?.close));
+    dot.classList.toggle("has-attempt", Boolean(attempt));
+    dot.tabIndex = attempt ? 0 : -1;
+    dot.setAttribute("aria-pressed", String(recallIndex === index && Boolean(attempt)));
+    dot.setAttribute("aria-label", attempt?.close ? "Show the near miss" : attempt ? `Show mistake ${index + 1}` : `Mistake ${index + 1}`);
+  });
+  closeTip.hidden = !attempts[recallIndex]?.close;
+}
+
+function applyRecall() {
+  const ids = recallIndex >= 0 ? new Set(attempts[recallIndex]?.ids ?? []) : null;
+  board.classList.toggle("is-recalling", Boolean(ids?.size));
+  board.querySelectorAll(".recall-frame").forEach((frame) => frame.remove());
+  for (const el of board.querySelectorAll("[data-id]")) {
+    const on = Boolean(ids?.has(el.dataset.id));
+    el.classList.toggle("is-recalled", on);
+    el.classList.toggle("is-dimmed", Boolean(ids?.size) && !on);
+  }
+  paintDots();
+  if (!ids?.size) return;
+  for (const row of solvedRows.querySelectorAll(".solved-row")) {
+    const rowRect = row.getBoundingClientRect();
+    for (const cell of row.querySelectorAll(".solved-cell.is-recalled")) {
+      const rect = cell.getBoundingClientRect();
+      const frame = document.createElement("span");
+      frame.className = "recall-frame";
+      frame.style.left = `${rect.left - rowRect.left}px`;
+      frame.style.top = `${rect.top - rowRect.top}px`;
+      frame.style.width = `${rect.width}px`;
+      frame.style.height = `${rect.height}px`;
+      row.append(frame);
+    }
+  }
+}
+
+window.addEventListener("resize", () => {
+  if (recallIndex >= 0) applyRecall();
+});
+
+function showRecall(index) {
+  if (busy || !attempts[index]) return;
+  recallIndex = index;
+  applyRecall();
+}
+
+function clearRecall() {
+  if (recallIndex < 0) return;
+  recallIndex = -1;
+  applyRecall();
+}
+
+dots.forEach((dot, index) => {
+  dot.addEventListener("pointerdown", (event) => {
+    lastPointer = event.pointerType;
+  });
+  dot.addEventListener("pointerenter", (event) => {
+    if (event.pointerType !== "mouse") return;
+    showRecall(index);
+  });
+  dot.addEventListener("pointerleave", (event) => {
+    if (event.pointerType !== "mouse") return;
+    if (recallIndex === index) clearRecall();
+  });
+  dot.addEventListener("focus", () => {
+    if (lastPointer === "touch") return;
+    showRecall(index);
+  });
+  dot.addEventListener("blur", () => {
+    if (recallIndex === index) clearRecall();
+  });
+  dot.addEventListener("click", () => {
+    if (lastPointer !== "touch" || !attempts[index]) return;
+    if (recallIndex === index) clearRecall();
+    else showRecall(index);
+  });
+});
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function motionEnd(element, eventName, ms) {
+  return new Promise((resolve) => {
+    const timer = setTimeout(finish, ms + 80);
+    function finish() {
+      clearTimeout(timer);
+      element.removeEventListener(eventName, onEnd);
+      resolve();
+    }
+    function onEnd(event) {
+      if (event.target !== element) return;
+      finish();
+    }
+    element.addEventListener(eventName, onEnd);
+  });
+}
+
+function visualOrder(wraps) {
+  return [...wraps].sort((a, b) => {
+    const ra = a.getBoundingClientRect();
+    const rb = b.getBoundingClientRect();
+    if (Math.abs(ra.top - rb.top) > 8) return ra.top - rb.top;
+    return ra.left - rb.left;
+  });
+}
+
+async function jumpInTurn(wraps) {
+  for (const wrap of wraps) {
+    const tile = wrap.querySelector(".tile");
+    wrap.classList.add("is-jump");
+    await motionEnd(tile, "animationend", JUMP_MS);
+    wrap.classList.remove("is-jump");
+  }
+}
+
+async function shakeTogether(wraps) {
+  await Promise.all(wraps.map(async (wrap) => {
+    const tile = wrap.querySelector(".tile");
+    wrap.classList.add("is-shake");
+    await motionEnd(tile, "animationend", SHAKE_MS);
+    wrap.classList.remove("is-shake");
+  }));
+}
+
+function captureBoard() {
+  const places = new Map();
+  for (const wrap of grid.querySelectorAll(".tile-wrap")) {
+    places.set(wrap.dataset.id, wrap.getBoundingClientRect());
+  }
+  return places;
+}
+
+async function flyIntoPlace(places) {
+  const animated = [];
+  for (const el of board.querySelectorAll("[data-id]")) {
+    const from = places.get(el.dataset.id);
+    if (!from) continue;
+    const to = el.getBoundingClientRect();
+    const dx = from.left - to.left;
+    const dy = from.top - to.top;
+    const sx = to.width ? from.width / to.width : 1;
+    const sy = to.height ? from.height / to.height : 1;
+    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(sx - 1) < 0.01 && Math.abs(sy - 1) < 0.01) continue;
+    el.style.transformOrigin = "top left";
+    el.style.transition = "none";
+    el.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+    animated.push(el);
+  }
+  if (!animated.length) return;
+  board.offsetWidth;
+  for (const el of animated) {
+    el.style.transition = `transform ${FLY_MS}ms cubic-bezier(.22, .8, .28, 1)`;
+    el.style.transform = "translate(0px, 0px) scale(1, 1)";
+  }
+  await motionEnd(animated[0], "transitionend", FLY_MS);
+  for (const el of animated) {
+    el.style.transition = "";
+    el.style.transform = "";
+    el.style.transformOrigin = "";
+  }
+}
+
+function toggle(id) {
+  if (ended || busy) return;
+  const at = selected.indexOf(id);
+  if (at >= 0) selected.splice(at, 1);
+  else if (selected.length < 4) selected.push(id);
+  wrongIds = new Set();
+  render();
+}
+
+shuffleButton.addEventListener("click", () => {
+  if (ended || busy) return;
+  unsolved = shuffle(unsolved);
+  render();
+});
+
+deselectButton.addEventListener("click", () => {
+  if (ended || busy) return;
+  selected.length = 0;
+  wrongIds = new Set();
+  render();
+});
+
+submitButton.addEventListener("click", async () => {
+  if (ended || busy || selected.length !== 4) return;
+  const guess = selected.slice();
+  guesses.push(guess);
+  hideToast();
+  busy = true;
+  recallIndex = -1;
+  applyRecall();
+  closeZoom();
+  grid.querySelectorAll(".is-loupe").forEach((el) => el.classList.remove("is-loupe"));
+  submitButton.disabled = true;
+  shuffleButton.disabled = true;
+  deselectButton.disabled = true;
+
+  const wraps = visualOrder([...grid.querySelectorAll(".tile-wrap")].filter((wrap) => isSelected(wrap.dataset.id)));
+  const match = selectedGroup();
+  if (motionOk) await jumpInTurn(wraps);
+  await wait(motionOk ? SUSPENSE_MS : 280);
+
+  if (match) {
+    const places = captureBoard();
+    solved.push(match.id);
+    unsolved = unsolved.filter((id) => !isSelected(id));
+    selected.length = 0;
+    wrongIds = new Set();
+    if (solved.length === puzzle.groups.length) ended = "won";
+    if (motionOk) {
+      render({ pendingTitleId: match.id });
+      await flyIntoPlace(places);
+      const row = solvedRows.querySelector(".solved-row.is-pending");
+      row?.classList.remove("is-flying");
+      const title = row?.querySelector("strong");
+      title?.classList.add("is-shown");
+      title?.removeAttribute("aria-hidden");
+      if (ended === "won") message.textContent = "You found all four groups.";
+      await wait(400);
+      row?.classList.remove("is-pending");
+      title?.classList.remove("is-shown");
+    }
+    busy = false;
+    if (ended) setFinished(true);
+    else if (motionOk) {
+      shuffleButton.disabled = unsolved.length < 2;
+      deselectButton.disabled = true;
+      submitButton.disabled = true;
+    } else render();
+    return;
+  }
+
+  mistakes += 1;
+  const close = isOneAway(guess);
+  attempts.push({ ids: guess, close });
+  wrongIds = new Set(selected);
+  message.textContent = "That isn’t one of the groups.";
+  const notes = [];
+  if (close) notes.push("So close! Three are matching!");
+  if (mistakes === 4) notes.push("Last Chance!");
+  if (notes.length) showToast(notes);
+  paintDots();
+  for (const wrap of wraps) wrap.querySelector(".tile").classList.add("is-wrong");
+  if (motionOk) await shakeTogether(wraps);
+  await wait(motionOk ? 850 : 1100);
+
+  const lost = mistakes >= 5;
+  selected.length = 0;
+  wrongIds = new Set();
+  busy = false;
+  if (lost) {
+    ended = "lost";
+    render();
+    return;
+  }
+  for (const wrap of grid.querySelectorAll(".tile-wrap")) {
+    const tile = wrap.querySelector(".tile");
+    wrap.classList.remove("is-jump", "is-shake");
+    tile.classList.remove("is-wrong", "is-shake");
+    tile.setAttribute("aria-pressed", "false");
+  }
+  message.textContent = "";
+  shuffleButton.disabled = unsolved.length < 2;
+  deselectButton.disabled = true;
+  submitButton.disabled = true;
+});
+
+function setFinished(on) {
+  shuffleButton.hidden = on;
+  deselectButton.hidden = on;
+  submitButton.hidden = on;
+  resultsButton.hidden = !on;
+}
+
+function openResults() {
+  resultsNumber.textContent = `Puzzle #${puzzleNumber}`;
+  resultsGrid.textContent = guesses.map((guess) => guess.map(emojiFor).join("")).join("\n");
+  copiedNote.classList.remove("is-shown");
+  resultsLayer.hidden = false;
+  shareButton.focus();
+}
+
+function closeResults() {
+  resultsLayer.hidden = true;
+  copiedNote.classList.remove("is-shown");
+}
+
+function copyWithTextarea(text) {
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.top = "0";
+  area.style.left = "0";
+  area.style.opacity = "0";
+  document.body.append(area);
+  area.focus();
+  area.select();
+  let copied = false;
+  try {
+    copied = document.execCommand("copy");
+  } catch {
+    copied = false;
+  }
+  area.remove();
+  return copied;
+}
+
+let copiedTimer = 0;
+function showCopied() {
+  copiedNote.classList.add("is-shown");
+  clearTimeout(copiedTimer);
+  copiedTimer = setTimeout(() => copiedNote.classList.remove("is-shown"), 1600);
+}
+
+function openInfo() {
+  infoLayer.hidden = false;
+}
+
+function closeInfo() {
+  infoLayer.hidden = true;
+}
+
+document.querySelector("#info").addEventListener("click", openInfo);
+document.querySelector("#info-close").addEventListener("click", closeInfo);
+infoLayer.addEventListener("click", (event) => {
+  if (event.target === infoLayer) closeInfo();
+});
+
+resultsButton.addEventListener("click", openResults);
+document.querySelector("#results-layer .results-close").addEventListener("click", closeResults);
+resultsLayer.addEventListener("click", (event) => {
+  if (event.target === resultsLayer) closeResults();
+});
+shareButton.addEventListener("click", () => {
+  const text = resultsText();
+  const legacy = copyWithTextarea(text);
+  if (legacy) showCopied();
+  const write = navigator.clipboard?.writeText(text);
+  if (!write) return;
+  write.then(() => {
+    if (!legacy) showCopied();
+  }).catch(() => {});
+});
+
+render();
+
+  </script>
+  
+</body>
+</html>

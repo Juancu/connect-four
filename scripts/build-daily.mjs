@@ -115,7 +115,6 @@ await writeFile(path.join(root, "site", "index.html"), puzzleHtml({
 }));
 
 for (const number of numbers) {
-  if (number === currentNumber) continue;
   const folder = path.join(root, "site", String(number));
   await mkdir(folder, { recursive: true });
   await writeFile(path.join(folder, "index.html"), puzzleHtml({
@@ -123,7 +122,7 @@ for (const number of numbers) {
     number,
     title: `connectTag #${String(number).padStart(3, "0")}`,
     footer: "",
-    discord: "",
+    discord: number === currentNumber ? discord : "",
   }));
 }
 
