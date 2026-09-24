@@ -126,6 +126,13 @@ for (const number of numbers) {
   }));
 }
 
+const siteDir = path.join(root, "site");
+for (const entry of await readdir(siteDir, { withFileTypes: true })) {
+  if (!entry.isDirectory() || !/^\d+$/.test(entry.name)) continue;
+  if (numbers.includes(Number(entry.name))) continue;
+  await rm(path.join(siteDir, entry.name), { recursive: true, force: true });
+}
+
 const names = puzzles.get(currentNumber).map((group) => group.name).join(", ");
 console.log(`Wrote daily ${String(currentNumber).padStart(3, "0")} (${names}). Earlier dailies: ${numbers.filter((number) => number !== currentNumber).join(", ") || "none"}.`);
 if (!clientId) console.log("No Discord client id yet. Add it to data/discord.json and run npm run daily again.");

@@ -178,8 +178,9 @@ function render({ pendingTitleId = null } = {}) {
         button.addEventListener("pointercancel", cancelHold);
       });
       wrap.append(button, loupeButton(id));
-      wrap.addEventListener("pointerenter", () => {
-        if (busy) return;
+      wrap.addEventListener("pointerenter", (event) => {
+        if (busy || event.pointerType !== "mouse") return;
+        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
         wrap.classList.add("is-loupe");
       });
       wrap.addEventListener("pointerleave", () => {
