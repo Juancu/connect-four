@@ -158,10 +158,13 @@ function render({ pendingTitleId = null } = {}) {
         toggle(id);
       });
       button.addEventListener("contextmenu", (event) => event.preventDefault());
+      button.addEventListener("selectstart", (event) => event.preventDefault());
       button.addEventListener("pointerdown", (event) => {
         if (event.pointerType === "mouse" || ended || busy) return;
+        window.getSelection()?.removeAllRanges();
         const startX = event.clientX;
         const startY = event.clientY;
+        const clearSelect = setInterval(() => window.getSelection()?.removeAllRanges(), 40);
         const hold = setTimeout(() => {
           suppressClick = true;
           openZoom(id);
@@ -169,6 +172,7 @@ function render({ pendingTitleId = null } = {}) {
         const cancelHold = (move) => {
           if (move?.type === "pointermove" && Math.hypot(move.clientX - startX, move.clientY - startY) < 12) return;
           clearTimeout(hold);
+          clearInterval(clearSelect);
           button.removeEventListener("pointermove", cancelHold);
           button.removeEventListener("pointerup", cancelHold);
           button.removeEventListener("pointercancel", cancelHold);

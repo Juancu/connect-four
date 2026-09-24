@@ -175,7 +175,15 @@
       background: var(--tile);
       cursor: pointer;
       touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
       -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tile::selection,
+    .tile img::selection {
+      background: transparent;
     }
 
     .tile img {
@@ -183,8 +191,11 @@
       width: 100%;
       aspect-ratio: 571 / 460;
       object-fit: contain;
+      pointer-events: none;
+      -webkit-user-select: none;
       user-select: none;
       -webkit-user-drag: none;
+      -webkit-touch-callout: none;
     }
 
     .tile[aria-pressed="true"] { border-color: var(--gold); }
