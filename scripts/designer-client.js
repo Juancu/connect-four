@@ -2,10 +2,15 @@ const TAGS = JSON.parse(document.getElementById("designer-data").textContent);
 const MAX_PER_TAG = 4;
 
 const categories = document.querySelector("#categories");
+const browseButton = document.querySelector("#browse");
+const browseLayer = document.querySelector("#browse-layer");
+const browseBody = document.querySelector("#browse-body");
 const exportButton = document.querySelector("#export");
 const status = document.querySelector("#status");
 const jsonOut = document.querySelector("#json-out");
 const summary = document.querySelector("#summary");
+const zoom = document.querySelector("#zoom");
+const zoomImage = zoom.querySelector("img");
 
 const picks = {};
 try {
@@ -54,14 +59,39 @@ function render() {
       button.className = "shot";
       button.dataset.id = id;
       button.setAttribute("aria-pressed", String(chosen.has(id)));
-      const image = document.createElement("img");
-      image.src = `data/art/${id}.jpg`;
-      image.alt = "";
-      image.draggable = false;
-      image.loading = "lazy";
-      button.append(image);
-      button.addEventListener("click", () => toggle(tag.slug, id));
-      row.append(button);
+      button.append(picture(id));
+      button.addEventListener("click", () => {
+        if (suppressClick) {
+          suppressClick = false;
+          return;
+        }
+        toggle(tag.slug, id);
+      });
+      button.addEventListener("contextmenu", (event) => event.preventDefault());
+      button.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse") return;
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const hold = setTimeout(() => {
+          suppressClick = true;
+          openZoom(tag.images, id);
+        }, 500);
+        const cancelHold = (move) => {
+          if (move?.type === "pointermove" && Math.hypot(move.clientX - startX, move.clientY - startY) < 12) return;
+          clearTimeout(hold);
+          button.removeEventListener("pointermove", cancelHold);
+          button.removeEventListener("pointerup", cancelHold);
+          button.removeEventListener("pointercancel", cancelHold);
+        };
+        button.addEventListener("pointermove", cancelHold);
+        button.addEventListener("pointerup", cancelHold);
+        button.addEventListener("pointercancel", cancelHold);
+      });
+      const wrap = document.createElement("div");
+      wrap.className = "shot-wrap";
+      wrap.append(button, loupeButton(tag.images, id));
+      watchLoupe(wrap);
+      row.append(wrap);
     }
 
     section.append(header, row);
@@ -109,6 +139,120 @@ function setStatus(message) {
   status.textContent = message;
 }
 
+function picture(id) {
+  const image = document.createElement("img");
+  image.src = `data/art/${id}.jpg`;
+  image.alt = "";
+  image.draggable = false;
+  image.loading = "lazy";
+  return image;
+}
+
+function watchLoupe(wrap) {
+  wrap.addEventListener("pointerenter", (event) => {
+    if (event.pointerType !== "mouse") return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    wrap.classList.add("is-loupe");
+  });
+  wrap.addEventListener("pointerleave", () => wrap.classList.remove("is-loupe"));
+}
+
+function loupeButton(ids, id) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "loupe";
+  button.setAttribute("aria-label", "Zoom picture");
+  button.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.2 15.2 L20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openZoom(ids, id);
+  });
+  return button;
+}
+
+let suppressClick = false;
+let zoomIds = [];
+let zoomIndex = 0;
+let zoomSwipe = null;
+
+function showZoom() {
+  if (!zoomIds.length) {
+    closeZoom();
+    return;
+  }
+  zoomIndex = (zoomIndex + zoomIds.length) % zoomIds.length;
+  zoomImage.src = `data/art/${zoomIds[zoomIndex]}.jpg`;
+  zoom.hidden = false;
+}
+
+function openZoom(ids, id) {
+  zoomIds = [...ids];
+  zoomIndex = Math.max(0, zoomIds.indexOf(id));
+  showZoom();
+}
+
+function stepZoom(delta) {
+  zoomIndex += delta;
+  showZoom();
+}
+
+function closeZoom() {
+  zoom.hidden = true;
+  zoomImage.removeAttribute("src");
+  zoomIds = [];
+  zoomSwipe = null;
+}
+
+function pickedGroups() {
+  return TAGS
+    .map((tag) => ({
+      slug: tag.slug,
+      name: tag.name,
+      images: selectedIds(tag.slug).filter((id) => tag.images.includes(id)),
+    }))
+    .filter((group) => group.images.length > 0);
+}
+
+function openBrowse() {
+  browseBody.replaceChildren();
+  const groups = pickedGroups();
+  if (groups.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.textContent = "No pictures selected yet.";
+    browseBody.append(empty);
+  } else {
+    for (const group of groups) {
+      const section = document.createElement("section");
+      section.className = "browse-group";
+      const title = document.createElement("h3");
+      title.textContent = `${group.name} ${group.images.length}/${MAX_PER_TAG}`;
+      const row = document.createElement("div");
+      row.className = "browse-row";
+      for (const id of group.images) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "shot";
+        button.append(picture(id));
+        button.addEventListener("click", () => openZoom(group.images, id));
+        const wrap = document.createElement("div");
+        wrap.className = "shot-wrap";
+        wrap.append(button, loupeButton(group.images, id));
+        watchLoupe(wrap);
+        row.append(wrap);
+      }
+      section.append(title, row);
+      browseBody.append(section);
+    }
+  }
+  browseLayer.hidden = false;
+}
+
+function closeBrowse() {
+  browseLayer.hidden = true;
+  browseBody.replaceChildren();
+}
+
 async function copyJson() {
   const groups = readyGroups();
   if (groups.length === 0) {
@@ -135,6 +279,48 @@ async function copyJson() {
     ? `Copied ${groups.length} ${groups.length === 1 ? "category" : "categories"}.`
     : "Clipboard was blocked. The JSON is selected below — press Ctrl+C.");
 }
+
+browseButton.addEventListener("click", openBrowse);
+document.querySelector("#browse-close").addEventListener("click", closeBrowse);
+browseLayer.addEventListener("click", (event) => {
+  if (event.target === browseLayer) closeBrowse();
+});
+
+zoom.addEventListener("pointerdown", (event) => {
+  if (event.target.closest(".zoom-prev, .zoom-next")) return;
+  zoomSwipe = { x: event.clientX, y: event.clientY };
+});
+
+zoom.addEventListener("pointerup", (event) => {
+  if (event.target.closest(".zoom-prev, .zoom-next") || !zoomSwipe) return;
+  const dx = event.clientX - zoomSwipe.x;
+  const dy = event.clientY - zoomSwipe.y;
+  zoomSwipe = null;
+  if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
+    stepZoom(dx < 0 ? 1 : -1);
+    return;
+  }
+  closeZoom();
+});
+
+document.querySelector(".zoom-prev").addEventListener("click", (event) => {
+  event.stopPropagation();
+  stepZoom(-1);
+});
+document.querySelector(".zoom-next").addEventListener("click", (event) => {
+  event.stopPropagation();
+  stepZoom(1);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!zoom.hidden) {
+    if (event.key === "Escape") closeZoom();
+    if (event.key === "ArrowLeft") stepZoom(-1);
+    if (event.key === "ArrowRight") stepZoom(1);
+    return;
+  }
+  if (!browseLayer.hidden && event.key === "Escape") closeBrowse();
+});
 
 exportButton.addEventListener("click", () => {
   copyJson();

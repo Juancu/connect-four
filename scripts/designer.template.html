@@ -71,6 +71,18 @@
       cursor: not-allowed;
     }
 
+    button.secondary {
+      height: 40px;
+      padding: 0 16px;
+      border: 1px solid #5c564c;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
     #status {
       margin: 0;
       color: var(--gold);
@@ -107,8 +119,12 @@
       padding: 0 22px 10px;
     }
 
-    .shot {
+    .shot-wrap {
+      position: relative;
       flex: 0 0 auto;
+    }
+
+    .shot {
       padding: 0;
       border: 3px solid transparent;
       border-radius: 10px;
@@ -129,6 +145,125 @@
 
     .shot[aria-pressed="true"] { border-color: var(--gold); }
 
+    .loupe {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(20, 19, 17, 0.82);
+      color: white;
+      display: grid;
+      place-items: center;
+      cursor: zoom-in;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .shot-wrap.is-loupe .loupe {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    .layer {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(8, 7, 6, 0.72);
+    }
+
+    .layer[hidden] { display: none; }
+
+    .dialog {
+      position: relative;
+      width: min(920px, 100%);
+      max-height: min(80vh, 760px);
+      overflow: auto;
+      padding: 22px 22px 18px;
+      border-radius: 16px;
+      background: #2a2622;
+    }
+
+    .dialog-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink);
+      font: 28px/1 "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+    }
+
+    .dialog h2 {
+      margin: 0 36px 16px 0;
+      font-size: 20px;
+    }
+
+    .dialog .empty { padding: 4px 0 8px; }
+
+    .browse-group { margin: 0 0 18px; }
+
+    .browse-group h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .browse-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    #zoom {
+      position: fixed;
+      inset: 0;
+      z-index: 9;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background: rgba(8, 7, 6, 0.92);
+      cursor: zoom-out;
+    }
+
+    #zoom[hidden] { display: none; }
+
+    #zoom img {
+      max-width: min(1100px, 100%);
+      max-height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .zoom-prev,
+    .zoom-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 76px;
+      border: 0;
+      border-radius: 12px;
+      background: rgba(20, 19, 17, 0.78);
+      color: white;
+      font: 40px/1 "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+    }
+
+    .zoom-prev { left: 12px; }
+    .zoom-next { right: 12px; }
+
     .empty { padding: 24px 22px; color: var(--muted); }
 
     #json-out {
@@ -146,10 +281,11 @@
   <div class="toolbar">
     <div>
       <h1>Daily puzzle</h1>
-      <p>Click 4 pictures in each category you want. Export copies the selection.</p>
+      <p>Click 4 pictures in each category you want. Hover a picture for Zoom-in. Export copies the selection.</p>
     </div>
     <div class="actions">
       <span id="summary"></span>
+      <button type="button" id="browse" class="secondary">Browse</button>
       <button type="button" id="export" class="primary">Export</button>
     </div>
   </div>
@@ -158,6 +294,18 @@
     <div id="categories"></div>
     <textarea id="json-out" hidden readonly></textarea>
   </main>
+  <div id="browse-layer" class="layer" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="browse-title">
+      <button type="button" class="dialog-close" id="browse-close" aria-label="Close">×</button>
+      <h2 id="browse-title">Selected pictures</h2>
+      <div id="browse-body"></div>
+    </div>
+  </div>
+  <div id="zoom" hidden>
+    <button type="button" class="zoom-prev" aria-label="Previous picture">‹</button>
+    <img alt="">
+    <button type="button" class="zoom-next" aria-label="Next picture">›</button>
+  </div>
   <script id="designer-data" type="application/json">__DESIGNER_DATA__</script>
   <script>
 /*__CLIENT__*/
