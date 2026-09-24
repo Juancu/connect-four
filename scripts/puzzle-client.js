@@ -5,6 +5,8 @@ const solvedRows = document.querySelector("#solved");
 const grid = document.querySelector("#grid");
 const dots = [...document.querySelectorAll(".dot")];
 const message = document.querySelector("#message");
+const toast = document.querySelector("#toast");
+const closeTip = document.querySelector("#close-tip");
 const shuffleButton = document.querySelector("#shuffle");
 const deselectButton = document.querySelector("#deselect");
 const submitButton = document.querySelector("#submit");
@@ -64,6 +66,35 @@ function selectedGroup() {
   return puzzle.groups.find((group) => group.cards.every((card) => isSelected(card.id))) ?? null;
 }
 
+function isOneAway(ids) {
+  const counts = new Map();
+  for (const id of ids) {
+    const groupId = cards.get(id).groupId;
+    counts.set(groupId, (counts.get(groupId) ?? 0) + 1);
+  }
+  return [...counts.values()].includes(3);
+}
+
+let toastTimer = 0;
+function hideToast() {
+  clearTimeout(toastTimer);
+  toast.hidden = true;
+}
+
+function showToast(lines) {
+  toast.replaceChildren();
+  for (const line of lines) {
+    const row = document.createElement("span");
+    row.textContent = line;
+    toast.append(row);
+  }
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.hidden = true;
+  }, 3000);
+}
+
 function emojiFor(id) {
   const index = puzzle.groups.findIndex((group) => group.id === cards.get(id).groupId);
   const rank = Number(puzzle.groups[index]?.difficulty);
@@ -108,7 +139,6 @@ function render({ pendingTitleId = null } = {}) {
     grid.hidden = true;
   } else {
     grid.hidden = false;
-    clearLoupeTimer();
     for (const id of unsolved) {
       const card = cards.get(id);
       const wrap = document.createElement("div");
@@ -150,11 +180,9 @@ function render({ pendingTitleId = null } = {}) {
       wrap.append(button, loupeButton(id));
       wrap.addEventListener("pointerenter", () => {
         if (busy) return;
-        clearLoupeTimer();
-        loupeTimer = setTimeout(() => wrap.classList.add("is-loupe"), 1000);
+        wrap.classList.add("is-loupe");
       });
       wrap.addEventListener("pointerleave", () => {
-        clearLoupeTimer();
         wrap.classList.remove("is-loupe");
       });
       grid.append(wrap);
@@ -178,16 +206,10 @@ function render({ pendingTitleId = null } = {}) {
 
 const zoom = document.querySelector("#zoom");
 const zoomImage = zoom.querySelector("img");
-let loupeTimer = null;
 let suppressClick = false;
 let zoomIds = [];
 let zoomIndex = 0;
 let zoomSwipe = null;
-
-function clearLoupeTimer() {
-  clearTimeout(loupeTimer);
-  loupeTimer = null;
-}
 
 function showZoom() {
   if (!zoomIds.length) {
@@ -200,7 +222,6 @@ function showZoom() {
 }
 
 function openZoom(id) {
-  clearLoupeTimer();
   zoomIds = [...unsolved];
   zoomIndex = Math.max(0, zoomIds.indexOf(id));
   showZoom();
@@ -282,16 +303,18 @@ function picture(src) {
 function paintDots() {
   dots.forEach((dot, index) => {
     const attempt = attempts[index];
-    dot.classList.toggle("is-wrong", Boolean(attempt));
+    dot.classList.toggle("is-wrong", Boolean(attempt) && !attempt.close);
+    dot.classList.toggle("is-close", Boolean(attempt?.close));
     dot.classList.toggle("has-attempt", Boolean(attempt));
     dot.tabIndex = attempt ? 0 : -1;
     dot.setAttribute("aria-pressed", String(recallIndex === index && Boolean(attempt)));
-    dot.setAttribute("aria-label", attempt ? `Show mistake ${index + 1}` : `Mistake ${index + 1}`);
+    dot.setAttribute("aria-label", attempt?.close ? "Show the near miss" : attempt ? `Show mistake ${index + 1}` : `Mistake ${index + 1}`);
   });
+  closeTip.hidden = !attempts[recallIndex]?.close;
 }
 
 function applyRecall() {
-  const ids = recallIndex >= 0 ? new Set(attempts[recallIndex] ?? []) : null;
+  const ids = recallIndex >= 0 ? new Set(attempts[recallIndex]?.ids ?? []) : null;
   board.classList.toggle("is-recalling", Boolean(ids?.size));
   board.querySelectorAll(".recall-frame").forEach((frame) => frame.remove());
   for (const el of board.querySelectorAll("[data-id]")) {
@@ -299,6 +322,7 @@ function applyRecall() {
     el.classList.toggle("is-recalled", on);
     el.classList.toggle("is-dimmed", Boolean(ids?.size) && !on);
   }
+  paintDots();
   if (!ids?.size) return;
   for (const row of solvedRows.querySelectorAll(".solved-row")) {
     const rowRect = row.getBoundingClientRect();
@@ -313,7 +337,6 @@ function applyRecall() {
       row.append(frame);
     }
   }
-  paintDots();
 }
 
 window.addEventListener("resize", () => {
@@ -469,11 +492,11 @@ submitButton.addEventListener("click", async () => {
   if (ended || busy || selected.length !== 4) return;
   const guess = selected.slice();
   guesses.push(guess);
+  hideToast();
   busy = true;
   recallIndex = -1;
   applyRecall();
   closeZoom();
-  clearLoupeTimer();
   grid.querySelectorAll(".is-loupe").forEach((el) => el.classList.remove("is-loupe"));
   submitButton.disabled = true;
   shuffleButton.disabled = true;
@@ -515,9 +538,14 @@ submitButton.addEventListener("click", async () => {
   }
 
   mistakes += 1;
-  attempts.push(guess);
+  const close = isOneAway(guess);
+  attempts.push({ ids: guess, close });
   wrongIds = new Set(selected);
   message.textContent = "That isn’t one of the groups.";
+  const notes = [];
+  if (close) notes.push("So close! Three are matching!");
+  if (mistakes === 4) notes.push("Last Chance!");
+  if (notes.length) showToast(notes);
   paintDots();
   for (const wrap of wraps) wrap.querySelector(".tile").classList.add("is-wrong");
   if (motionOk) await shakeTogether(wraps);

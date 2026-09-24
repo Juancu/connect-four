@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "bandage",
+    "name": "bandage",
+    "images": [
+      "34f64ecd-d1d1-4aa6-be8e-e97d38134cf2",
+      "050b6bb2-8b63-435b-85de-2ad39bda5cad",
+      "f006f92b-f011-48ff-b32d-272638f277b7",
+      "29ef36ba-de5d-4a76-8113-9444e0c7c844"
+    ]
+  },
+  {
+    "slug": "bare-buttock",
+    "name": "bare buttock",
+    "images": [
+      "d4c5357f-7a07-4e8b-a0e9-1c82cb620bd8",
+      "e87a70b0-4485-4362-9a1d-7c320cd7755e",
+      "898f22f3-e0d1-4adf-b760-423109d3ff35",
+      "2553e5a3-06d7-4a3a-ae94-adbc253e3164"
+    ]
+  },
+  {
+    "slug": "bell",
+    "name": "bell",
+    "images": [
+      "e4d32fec-8d96-4311-bec5-d7e40f7e2705",
+      "9541af44-ea5a-485c-9c14-c9235bf743fd",
+      "fe700ba7-e270-428b-a2e3-320ece27923b",
+      "5448800e-42a3-48f6-911c-4c91d81fc212"
+    ]
+  },
+  {
+    "slug": "chicken",
+    "name": "chicken",
+    "images": [
+      "1e758745-bac3-45c7-a889-eeb0849fae84",
+      "fbb7112a-1782-41cc-877e-9c9aa8754dc4",
+      "6def1c73-f22a-46e6-b4a4-6245bbe2b440",
+      "8866f60d-460b-4619-a099-850008167179"
+    ]
+  }
+]

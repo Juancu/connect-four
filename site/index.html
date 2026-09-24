@@ -298,13 +298,50 @@
     .zoom-prev { left: 12px; }
     .zoom-next { right: 12px; }
 
+    .notice {
+      margin: 0;
+      padding: 10px 16px;
+      border-radius: 14px;
+      background: var(--gold);
+      color: #1c160b;
+      font-weight: 750;
+      text-align: center;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      pointer-events: none;
+    }
+
+    #toast {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      z-index: 6;
+      display: grid;
+      gap: 2px;
+      transform: translateX(-50%);
+    }
+
+    #toast[hidden] { display: none; }
+
     .mistakes {
+      position: relative;
+      z-index: 7;
       display: flex;
       gap: 10px;
       align-items: center;
       justify-content: center;
       margin: 16px 0 12px;
       color: var(--muted);
+    }
+
+    .notice-above {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: calc(100vw - 24px);
+      font-size: 14px;
     }
 
     .dots { display: flex; gap: 2px; }
@@ -332,6 +369,7 @@
     }
 
     .dot.is-wrong::before { background: var(--red); }
+    .dot.is-close::before { background: var(--gold); }
 
     .dot.has-attempt { cursor: pointer; }
 
@@ -478,6 +516,7 @@
   </style>
 </head>
 <body>
+  <p id="toast" class="notice" hidden></p>
   <main>
     
     <p class="intro">Group four arts that share a Scryfall art tag. <button type="button" class="info" id="info" aria-label="More information">i</button></p>
@@ -487,6 +526,7 @@
       <div id="grid"></div>
     </div>
     <div class="mistakes">
+      <p id="close-tip" class="notice notice-above" hidden>So close! Three are matching!</p>
       <span>Mistakes remaining</span>
       <span class="dots">
         <button type="button" class="dot" aria-label="Mistake 1"></button>
@@ -528,7 +568,7 @@
     <img alt="">
     <button type="button" class="zoom-next" aria-label="Next picture">›</button>
   </div>
-  <script id="puzzle-data" type="application/json">{"number":1,"groups":[{"id":"bandage","name":"Bandage","cards":[{"id":"34f64ecd-d1d1-4aa6-be8e-e97d38134cf2","src":"images/34f64ecd-d1d1-4aa6-be8e-e97d38134cf2.jpg"},{"id":"050b6bb2-8b63-435b-85de-2ad39bda5cad","src":"images/050b6bb2-8b63-435b-85de-2ad39bda5cad.jpg"},{"id":"f006f92b-f011-48ff-b32d-272638f277b7","src":"images/f006f92b-f011-48ff-b32d-272638f277b7.jpg"},{"id":"29ef36ba-de5d-4a76-8113-9444e0c7c844","src":"images/29ef36ba-de5d-4a76-8113-9444e0c7c844.jpg"}]},{"id":"bare-buttock","name":"Bare Buttock","cards":[{"id":"d4c5357f-7a07-4e8b-a0e9-1c82cb620bd8","src":"images/d4c5357f-7a07-4e8b-a0e9-1c82cb620bd8.jpg"},{"id":"e87a70b0-4485-4362-9a1d-7c320cd7755e","src":"images/e87a70b0-4485-4362-9a1d-7c320cd7755e.jpg"},{"id":"898f22f3-e0d1-4adf-b760-423109d3ff35","src":"images/898f22f3-e0d1-4adf-b760-423109d3ff35.jpg"},{"id":"2553e5a3-06d7-4a3a-ae94-adbc253e3164","src":"images/2553e5a3-06d7-4a3a-ae94-adbc253e3164.jpg"}]},{"id":"bell","name":"Bell","cards":[{"id":"e4d32fec-8d96-4311-bec5-d7e40f7e2705","src":"images/e4d32fec-8d96-4311-bec5-d7e40f7e2705.jpg"},{"id":"9541af44-ea5a-485c-9c14-c9235bf743fd","src":"images/9541af44-ea5a-485c-9c14-c9235bf743fd.jpg"},{"id":"fe700ba7-e270-428b-a2e3-320ece27923b","src":"images/fe700ba7-e270-428b-a2e3-320ece27923b.jpg"},{"id":"5448800e-42a3-48f6-911c-4c91d81fc212","src":"images/5448800e-42a3-48f6-911c-4c91d81fc212.jpg"}]},{"id":"chicken","name":"Chicken","cards":[{"id":"1e758745-bac3-45c7-a889-eeb0849fae84","src":"images/1e758745-bac3-45c7-a889-eeb0849fae84.jpg"},{"id":"fbb7112a-1782-41cc-877e-9c9aa8754dc4","src":"images/fbb7112a-1782-41cc-877e-9c9aa8754dc4.jpg"},{"id":"6def1c73-f22a-46e6-b4a4-6245bbe2b440","src":"images/6def1c73-f22a-46e6-b4a4-6245bbe2b440.jpg"},{"id":"8866f60d-460b-4619-a099-850008167179","src":"images/8866f60d-460b-4619-a099-850008167179.jpg"}]}]}</script>
+  <script id="puzzle-data" type="application/json">{"number":2,"groups":[{"id":"eight-figures","name":"Eight Figures","cards":[{"id":"0bed0f9e-ec59-4e68-82c8-04589adc3448","src":"images/0bed0f9e-ec59-4e68-82c8-04589adc3448.jpg"},{"id":"d23ee00c-f300-4e22-b245-4239cc45be55","src":"images/d23ee00c-f300-4e22-b245-4239cc45be55.jpg"},{"id":"11812b67-d255-4582-891c-a3e12349881a","src":"images/11812b67-d255-4582-891c-a3e12349881a.jpg"},{"id":"ba8aa766-530d-4c24-b274-facc7a634102","src":"images/ba8aa766-530d-4c24-b274-facc7a634102.jpg"}]},{"id":"electric-guitar","name":"Electric Guitar","cards":[{"id":"bdd9dc23-2519-41f4-9613-93221adaac66","src":"images/bdd9dc23-2519-41f4-9613-93221adaac66.jpg"},{"id":"03e6479f-0d9f-431c-b6fa-6a6544f98440","src":"images/03e6479f-0d9f-431c-b6fa-6a6544f98440.jpg"},{"id":"bbce166f-9ce4-4342-a533-c4c57456a2bf","src":"images/bbce166f-9ce4-4342-a533-c4c57456a2bf.jpg"},{"id":"e0529f04-7399-49a1-a72f-80876de27e28","src":"images/e0529f04-7399-49a1-a72f-80876de27e28.jpg"}]},{"id":"elephant","name":"Elephant","cards":[{"id":"021eecb1-5a4a-4bb7-be48-f2fd87e433f0","src":"images/021eecb1-5a4a-4bb7-be48-f2fd87e433f0.jpg"},{"id":"7261a641-1d08-4786-91a2-7216a22b9a12","src":"images/7261a641-1d08-4786-91a2-7216a22b9a12.jpg"},{"id":"b79ba742-3835-45a6-b2fe-f98381dd0bf1","src":"images/b79ba742-3835-45a6-b2fe-f98381dd0bf1.jpg"},{"id":"5429f243-98ec-41d2-bdb8-330fd3ef7233","src":"images/5429f243-98ec-41d2-bdb8-330fd3ef7233.jpg"}]},{"id":"engine","name":"Engine","cards":[{"id":"572a46be-e43c-4ab9-9309-2b9ae79f99aa","src":"images/572a46be-e43c-4ab9-9309-2b9ae79f99aa.jpg"},{"id":"3c55c193-82f5-441f-a511-297696fb6196","src":"images/3c55c193-82f5-441f-a511-297696fb6196.jpg"},{"id":"19f7bc4a-9a50-405e-ae64-f4aac280ed84","src":"images/19f7bc4a-9a50-405e-ae64-f4aac280ed84.jpg"},{"id":"4ce8cd32-253e-4557-9391-39c3a4e2c5aa","src":"images/4ce8cd32-253e-4557-9391-39c3a4e2c5aa.jpg"}]}]}</script>
   <script>
 const puzzle = JSON.parse(document.getElementById("puzzle-data").textContent);
 
@@ -537,6 +577,8 @@ const solvedRows = document.querySelector("#solved");
 const grid = document.querySelector("#grid");
 const dots = [...document.querySelectorAll(".dot")];
 const message = document.querySelector("#message");
+const toast = document.querySelector("#toast");
+const closeTip = document.querySelector("#close-tip");
 const shuffleButton = document.querySelector("#shuffle");
 const deselectButton = document.querySelector("#deselect");
 const submitButton = document.querySelector("#submit");
@@ -596,6 +638,35 @@ function selectedGroup() {
   return puzzle.groups.find((group) => group.cards.every((card) => isSelected(card.id))) ?? null;
 }
 
+function isOneAway(ids) {
+  const counts = new Map();
+  for (const id of ids) {
+    const groupId = cards.get(id).groupId;
+    counts.set(groupId, (counts.get(groupId) ?? 0) + 1);
+  }
+  return [...counts.values()].includes(3);
+}
+
+let toastTimer = 0;
+function hideToast() {
+  clearTimeout(toastTimer);
+  toast.hidden = true;
+}
+
+function showToast(lines) {
+  toast.replaceChildren();
+  for (const line of lines) {
+    const row = document.createElement("span");
+    row.textContent = line;
+    toast.append(row);
+  }
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.hidden = true;
+  }, 3000);
+}
+
 function emojiFor(id) {
   const index = puzzle.groups.findIndex((group) => group.id === cards.get(id).groupId);
   const rank = Number(puzzle.groups[index]?.difficulty);
@@ -640,7 +711,6 @@ function render({ pendingTitleId = null } = {}) {
     grid.hidden = true;
   } else {
     grid.hidden = false;
-    clearLoupeTimer();
     for (const id of unsolved) {
       const card = cards.get(id);
       const wrap = document.createElement("div");
@@ -682,11 +752,9 @@ function render({ pendingTitleId = null } = {}) {
       wrap.append(button, loupeButton(id));
       wrap.addEventListener("pointerenter", () => {
         if (busy) return;
-        clearLoupeTimer();
-        loupeTimer = setTimeout(() => wrap.classList.add("is-loupe"), 1000);
+        wrap.classList.add("is-loupe");
       });
       wrap.addEventListener("pointerleave", () => {
-        clearLoupeTimer();
         wrap.classList.remove("is-loupe");
       });
       grid.append(wrap);
@@ -710,16 +778,10 @@ function render({ pendingTitleId = null } = {}) {
 
 const zoom = document.querySelector("#zoom");
 const zoomImage = zoom.querySelector("img");
-let loupeTimer = null;
 let suppressClick = false;
 let zoomIds = [];
 let zoomIndex = 0;
 let zoomSwipe = null;
-
-function clearLoupeTimer() {
-  clearTimeout(loupeTimer);
-  loupeTimer = null;
-}
 
 function showZoom() {
   if (!zoomIds.length) {
@@ -732,7 +794,6 @@ function showZoom() {
 }
 
 function openZoom(id) {
-  clearLoupeTimer();
   zoomIds = [...unsolved];
   zoomIndex = Math.max(0, zoomIds.indexOf(id));
   showZoom();
@@ -814,16 +875,18 @@ function picture(src) {
 function paintDots() {
   dots.forEach((dot, index) => {
     const attempt = attempts[index];
-    dot.classList.toggle("is-wrong", Boolean(attempt));
+    dot.classList.toggle("is-wrong", Boolean(attempt) && !attempt.close);
+    dot.classList.toggle("is-close", Boolean(attempt?.close));
     dot.classList.toggle("has-attempt", Boolean(attempt));
     dot.tabIndex = attempt ? 0 : -1;
     dot.setAttribute("aria-pressed", String(recallIndex === index && Boolean(attempt)));
-    dot.setAttribute("aria-label", attempt ? `Show mistake ${index + 1}` : `Mistake ${index + 1}`);
+    dot.setAttribute("aria-label", attempt?.close ? "Show the near miss" : attempt ? `Show mistake ${index + 1}` : `Mistake ${index + 1}`);
   });
+  closeTip.hidden = !attempts[recallIndex]?.close;
 }
 
 function applyRecall() {
-  const ids = recallIndex >= 0 ? new Set(attempts[recallIndex] ?? []) : null;
+  const ids = recallIndex >= 0 ? new Set(attempts[recallIndex]?.ids ?? []) : null;
   board.classList.toggle("is-recalling", Boolean(ids?.size));
   board.querySelectorAll(".recall-frame").forEach((frame) => frame.remove());
   for (const el of board.querySelectorAll("[data-id]")) {
@@ -831,6 +894,7 @@ function applyRecall() {
     el.classList.toggle("is-recalled", on);
     el.classList.toggle("is-dimmed", Boolean(ids?.size) && !on);
   }
+  paintDots();
   if (!ids?.size) return;
   for (const row of solvedRows.querySelectorAll(".solved-row")) {
     const rowRect = row.getBoundingClientRect();
@@ -845,7 +909,6 @@ function applyRecall() {
       row.append(frame);
     }
   }
-  paintDots();
 }
 
 window.addEventListener("resize", () => {
@@ -1001,11 +1064,11 @@ submitButton.addEventListener("click", async () => {
   if (ended || busy || selected.length !== 4) return;
   const guess = selected.slice();
   guesses.push(guess);
+  hideToast();
   busy = true;
   recallIndex = -1;
   applyRecall();
   closeZoom();
-  clearLoupeTimer();
   grid.querySelectorAll(".is-loupe").forEach((el) => el.classList.remove("is-loupe"));
   submitButton.disabled = true;
   shuffleButton.disabled = true;
@@ -1047,9 +1110,14 @@ submitButton.addEventListener("click", async () => {
   }
 
   mistakes += 1;
-  attempts.push(guess);
+  const close = isOneAway(guess);
+  attempts.push({ ids: guess, close });
   wrongIds = new Set(selected);
   message.textContent = "That isn’t one of the groups.";
+  const notes = [];
+  if (close) notes.push("So close! Three are matching!");
+  if (mistakes === 4) notes.push("Last Chance!");
+  if (notes.length) showToast(notes);
   paintDots();
   for (const wrap of wraps) wrap.querySelector(".tile").classList.add("is-wrong");
   if (motionOk) await shakeTogether(wraps);

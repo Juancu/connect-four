@@ -298,13 +298,50 @@
     .zoom-prev { left: 12px; }
     .zoom-next { right: 12px; }
 
+    .notice {
+      margin: 0;
+      padding: 10px 16px;
+      border-radius: 14px;
+      background: var(--gold);
+      color: #1c160b;
+      font-weight: 750;
+      text-align: center;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      pointer-events: none;
+    }
+
+    #toast {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      z-index: 6;
+      display: grid;
+      gap: 2px;
+      transform: translateX(-50%);
+    }
+
+    #toast[hidden] { display: none; }
+
     .mistakes {
+      position: relative;
+      z-index: 7;
       display: flex;
       gap: 10px;
       align-items: center;
       justify-content: center;
       margin: 16px 0 12px;
       color: var(--muted);
+    }
+
+    .notice-above {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: calc(100vw - 24px);
+      font-size: 14px;
     }
 
     .dots { display: flex; gap: 2px; }
@@ -332,6 +369,7 @@
     }
 
     .dot.is-wrong::before { background: var(--red); }
+    .dot.is-close::before { background: var(--gold); }
 
     .dot.has-attempt { cursor: pointer; }
 
@@ -478,6 +516,7 @@
   </style>
 </head>
 <body>
+  <p id="toast" class="notice" hidden></p>
   <main>
     <h1>connectTag</h1>
     <p class="intro">Group four arts that share a Scryfall art tag. <button type="button" class="info" id="info" aria-label="More information">i</button></p>
@@ -487,6 +526,7 @@
       <div id="grid"></div>
     </div>
     <div class="mistakes">
+      <p id="close-tip" class="notice notice-above" hidden>So close! Three are matching!</p>
       <span>Mistakes remaining</span>
       <span class="dots">
         <button type="button" class="dot" aria-label="Mistake 1"></button>
