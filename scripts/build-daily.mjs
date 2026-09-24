@@ -7,13 +7,12 @@ function displayName(name) {
   return name.replace(/\p{L}+/gu, (word) => word.charAt(0).toUpperCase() + word.slice(1));
 }
 
-function puzzleHtml({ groups, title, heading, intro, footer, discord }) {
+function puzzleHtml({ groups, title, footer, discord }) {
   return template
-    .replace("__PUZZLE_DATA__", () => JSON.stringify({ groups }).replace(/</g, "\\u003c"))
+    .replace("__PUZZLE_DATA__", () => JSON.stringify({ number: 1, groups }).replace(/</g, "\\u003c"))
     .replace("/*__CLIENT__*/", () => client)
     .replace("<title>connectTag puzzle</title>", `<title>${title}</title>`)
-    .replace("<h1>connectTag</h1>", `<h1>${heading}</h1>`)
-    .replace("Find the four pictures that share a tag. Select four, then submit.", intro)
+    .replace("<h1>connectTag</h1>", "")
     .replace("Another puzzle: npm run puzzle", footer)
     .replace("__DISCORD__", () => discord);
 }
@@ -54,8 +53,6 @@ const localGroups = groups.map((group) => ({
 await writeFile(path.join(root, "daily.html"), puzzleHtml({
   groups: localGroups,
   title: "connectTag daily",
-  heading: "Daily",
-  intro: "Today’s puzzle. Select four, then submit.",
   footer: "Random puzzle: puzzle.html",
   discord: "",
 }));
@@ -90,8 +87,6 @@ if (params.has("frame_id")) {
 await writeFile(path.join(root, "site", "index.html"), puzzleHtml({
   groups: hostedGroups,
   title: "connectTag daily",
-  heading: "Daily",
-  intro: "Today’s puzzle. Select four, then submit.",
   footer: "",
   discord,
 }));

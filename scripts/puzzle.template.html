@@ -45,6 +45,56 @@
       text-align: center;
     }
 
+    .info {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      margin-left: 6px;
+      padding: 0;
+      border: 1.5px solid var(--muted);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--muted);
+      font: italic 600 13px/1 Georgia, "Times New Roman", serif;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    .info:hover,
+    .info:focus-visible {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    #info-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(8, 7, 6, 0.72);
+    }
+
+    #info-layer[hidden] { display: none; }
+
+    .info-card {
+      position: relative;
+      width: min(460px, 100%);
+      padding: 36px 22px 22px;
+      border-radius: 16px;
+      background: #221f1b;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      text-align: left;
+    }
+
+    .info-card p {
+      margin: 0 0 12px;
+    }
+
+    .info-card p:last-child { margin-bottom: 0; }
+
     #message {
       min-height: 1.4em;
       margin: 0 0 12px;
@@ -70,6 +120,7 @@
       background: #221f1b;
     }
 
+    .solved-cell img,
     .solved-row img {
       display: block;
       width: 100%;
@@ -77,9 +128,15 @@
       object-fit: contain;
     }
 
+    .solved-row.is-flying {
+      z-index: 3;
+      overflow: visible;
+    }
+
     .solved-row strong {
       position: absolute;
       inset: 0;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -90,15 +147,23 @@
       letter-spacing: -0.02em;
       text-align: center;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      transition: opacity 360ms ease;
     }
 
+    .solved-row.is-pending strong { opacity: 0; }
+    .solved-row.is-pending strong.is-shown { opacity: 1; }
+
     #grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
 
     .tile-wrap { position: relative; }
+    .tile-wrap.is-jump,
+    .tile-wrap.is-shake { z-index: 2; }
 
     .tile {
       display: block;
@@ -125,6 +190,52 @@
     .tile[aria-pressed="true"] { border-color: var(--gold); }
 
     .tile.is-wrong { border-color: var(--red); }
+
+    .tile-wrap.is-jump .tile {
+      animation: tile-jump 320ms cubic-bezier(.2, .7, .3, 1);
+    }
+
+    .tile-wrap.is-shake .tile {
+      animation: tile-shake 800ms ease-in-out;
+    }
+
+    @keyframes tile-jump {
+      0% { transform: translateY(0); }
+      38% { transform: translateY(-22px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes tile-shake {
+      0%, 100% { transform: translateX(0); }
+      16% { transform: translateX(-12px); }
+      32% { transform: translateX(11px); }
+      48% { transform: translateX(-9px); }
+      64% { transform: translateX(8px); }
+      80% { transform: translateX(-4px); }
+    }
+
+    #board.is-recalling .tile-wrap.is-dimmed,
+    #board.is-recalling .solved-cell.is-dimmed {
+      opacity: 0.34;
+    }
+
+    #board.is-recalling .tile-wrap.is-recalled { z-index: 2; }
+
+    #board.is-recalling .tile-wrap.is-recalled .tile {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(240, 193, 75, 0.55);
+    }
+
+    #board.is-recalling .solved-cell.is-recalled img {
+      filter: brightness(1.18);
+    }
+
+    .recall-frame {
+      position: absolute;
+      z-index: 3;
+      box-shadow: inset 0 0 0 4px var(--gold);
+      pointer-events: none;
+    }
 
     .loupe {
       position: absolute;
@@ -196,16 +307,38 @@
       color: var(--muted);
     }
 
-    .dots { display: flex; gap: 8px; }
+    .dots { display: flex; gap: 2px; }
 
     .dot {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: inherit;
+    }
+
+    .dot::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 7px;
       width: 14px;
       height: 14px;
       border-radius: 50%;
       background: #6f6a62;
     }
 
-    .dot.is-wrong { background: var(--red); }
+    .dot.is-wrong::before { background: var(--red); }
+
+    .dot.has-attempt { cursor: pointer; }
+
+    .dot.has-attempt:hover::before,
+    .dot.has-attempt:focus-visible::before {
+      box-shadow: 0 0 0 2px var(--ink);
+    }
 
     .actions {
       display: flex;
@@ -226,11 +359,109 @@
       cursor: pointer;
     }
 
-    #submit:not(:disabled) {
+    #submit:not(:disabled),
+    #results,
+    #share {
       border-color: var(--gold);
       background: var(--gold);
       color: #1c160b;
       font-weight: 700;
+    }
+
+    #share {
+      min-width: 200px;
+      height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border-style: solid;
+      border-width: 1px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #results-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(8, 7, 6, 0.72);
+    }
+
+    #results-layer[hidden] { display: none; }
+
+    .results-card {
+      position: relative;
+      width: min(420px, 100%);
+      padding: 28px 22px 22px;
+      border-radius: 16px;
+      background: #221f1b;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      text-align: center;
+    }
+
+    .results-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      min-width: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink);
+      font: 24px/1 "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+    }
+
+    .results-card h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .results-number {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .results-grid {
+      margin: 16px 0 18px;
+      font-size: 28px;
+      line-height: 1.35;
+      letter-spacing: 0.06em;
+      white-space: pre;
+    }
+
+    .share-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .copied {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%) translateY(4px);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #1c160b;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .copied.is-shown {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     button:disabled {
@@ -249,7 +480,7 @@
 <body>
   <main>
     <h1>connectTag</h1>
-    <p class="intro">Find the four pictures that share a tag. Select four, then submit.</p>
+    <p class="intro">Group four arts that share a Scryfall art tag. <button type="button" class="info" id="info" aria-label="More information">i</button></p>
     <p id="message" role="status"></p>
     <div id="board">
       <div id="solved"></div>
@@ -257,20 +488,41 @@
     </div>
     <div class="mistakes">
       <span>Mistakes remaining</span>
-      <span class="dots" aria-hidden="true">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+      <span class="dots">
+        <button type="button" class="dot" aria-label="Mistake 1"></button>
+        <button type="button" class="dot" aria-label="Mistake 2"></button>
+        <button type="button" class="dot" aria-label="Mistake 3"></button>
+        <button type="button" class="dot" aria-label="Mistake 4"></button>
       </span>
     </div>
     <div class="actions">
       <button type="button" id="shuffle">Shuffle</button>
       <button type="button" id="deselect">Deselect all</button>
       <button type="button" id="submit" disabled>Submit</button>
+      <button type="button" id="results" hidden>View Results</button>
     </div>
     <footer>Another puzzle: npm run puzzle</footer>
   </main>
+  <div id="info-layer" hidden>
+    <div class="info-card" role="dialog" aria-modal="true" aria-label="More information">
+      <button type="button" class="results-close" id="info-close" aria-label="Close">×</button>
+      <p>No mechanical knowledge needed (you don't need to know the card titles, attributes, or whether they are in-universe or beyond.)</p>
+      <p>No meta attributes either (the artist, art medium, or style.)</p>
+      <p>Hover on a card for Zoom-in to appear.</p>
+    </div>
+  </div>
+  <div id="results-layer" hidden>
+    <div class="results-card" role="dialog" aria-modal="true" aria-labelledby="results-heading">
+      <button type="button" class="results-close" aria-label="Close">×</button>
+      <h2 id="results-heading">Tagger Connections</h2>
+      <p class="results-number"></p>
+      <div class="results-grid"></div>
+      <div class="share-wrap">
+        <span class="copied" role="status">Copied to Clipboard!</span>
+        <button type="button" id="share">Share Your Results</button>
+      </div>
+    </div>
+  </div>
   <div id="zoom" hidden>
     <button type="button" class="zoom-prev" aria-label="Previous picture">‹</button>
     <img alt="">
