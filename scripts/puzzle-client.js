@@ -13,7 +13,7 @@ const submitButton = document.querySelector("#submit");
 const resultsButton = document.querySelector("#results");
 const resultsLayer = document.querySelector("#results-layer");
 const infoLayer = document.querySelector("#info-layer");
-const resultsNumber = document.querySelector(".results-number");
+const resultsHeading = document.querySelector("#results-heading");
 const resultsGrid = document.querySelector(".results-grid");
 const shareButton = document.querySelector("#share");
 const copiedNote = document.querySelector(".copied");
@@ -34,8 +34,9 @@ const JUMP_MS = 320;
 const SUSPENSE_MS = 480;
 const SHAKE_MS = 800;
 const FLY_MS = 780;
-const puzzleNumber = String(puzzle.number ?? 1).padStart(3, "0");
-const puzzleLabel = puzzle.label || `Puzzle #${puzzleNumber}`;
+const shareTitle = puzzle.number == null
+  ? "Tag Connections"
+  : `Tag Connections #${String(puzzle.number).padStart(3, "0")}`;
 const categoryEmoji = ["🟩", "🟦", "🟨", "🟪"];
 let mistakes = 0;
 let ended = false;
@@ -105,7 +106,7 @@ function emojiFor(id) {
 
 function resultsText() {
   const rows = guesses.map((guess) => guess.map(emojiFor).join("")).join("\n");
-  return `Tagger Connections\n${puzzleLabel}\n${rows}`;
+  return `${shareTitle}\n${rows}`;
 }
 
 function render({ pendingTitleId = null } = {}) {
@@ -592,7 +593,7 @@ function setFinished(on) {
 }
 
 function openResults() {
-  resultsNumber.textContent = puzzleLabel;
+  resultsHeading.textContent = shareTitle;
   resultsGrid.textContent = guesses.map((guess) => guess.map(emojiFor).join("")).join("\n");
   copiedNote.classList.remove("is-shown");
   resultsLayer.hidden = false;
