@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "arcade-architecture",
+    "name": "arcade (architecture)",
+    "images": [
+      "1f5a74bb-7e51-4b43-b0c6-4202f51f1b9f",
+      "10cb6667-fb20-4fab-bf20-d0886c7f4d94",
+      "84eead85-fba1-4165-a634-b8553e0283e8",
+      "17d30bee-adf6-45cd-9fb9-9da46128f597"
+    ]
+  },
+  {
+    "slug": "bag",
+    "name": "bag",
+    "images": [
+      "35241413-61db-4ad1-a57b-abd6e6c0830d",
+      "4f88c62c-17fd-4e15-a51a-2d93ef2109d5",
+      "bf9712c5-a1ec-466a-acb2-f966c1d50c59",
+      "819f0e80-214d-4bb5-885d-510370d6a85a"
+    ]
+  },
+  {
+    "slug": "beak",
+    "name": "beak",
+    "images": [
+      "96b78cb9-847b-428f-a887-e330c2d9f9ee",
+      "6b8738c7-3f28-44b2-a860-129eacd764ef",
+      "2db0972b-936e-46f1-8641-a45866347897",
+      "ffeb5473-2790-492d-a7a9-2ef0dee620e0"
+    ]
+  },
+  {
+    "slug": "clock",
+    "name": "clock",
+    "images": [
+      "36a7a462-ed84-4114-89f5-85adffb91386",
+      "30b1a83c-e378-4738-bc19-5c4eec565e6e",
+      "7a81081e-2205-4c46-b6c4-e0f12a33e5c8",
+      "dfd6e84e-1702-4c03-a103-06ff24448ec5"
+    ]
+  }
+]
