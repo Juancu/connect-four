@@ -9,6 +9,7 @@
     "build:picker": "node scripts/build-tag-picker.mjs",
     "puzzle": "node scripts/build-puzzle.mjs",
     "daily": "node scripts/build-daily.mjs",
+    "hell": "node scripts/build-hell.mjs",
     "mine": "node scripts/mine-artwork.mjs",
     "build:designer": "node scripts/build-designer.mjs"
   }

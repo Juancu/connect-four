@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>connectTag daily</title>
+  <title>Hell</title>
   <style>
     :root {
       color-scheme: dark;
@@ -541,7 +541,7 @@
   <p id="toast" class="notice" hidden></p>
   <main>
     
-    <p class="intro">Group four arts that share a Scryfall art tag. <button type="button" class="info" id="info" aria-label="More information">i</button></p>
+    
     <p id="message" role="status"></p>
     <div id="board">
       <div id="solved"></div>
@@ -563,7 +563,7 @@
       <button type="button" id="submit" disabled>Submit</button>
       <button type="button" id="results" hidden>View Results</button>
     </div>
-    <footer>Random puzzle: puzzle.html</footer>
+    <footer></footer>
   </main>
   <div id="info-layer" hidden>
     <div class="info-card" role="dialog" aria-modal="true" aria-label="More information">
@@ -590,7 +590,7 @@
     <img alt="">
     <button type="button" class="zoom-next" aria-label="Next picture">›</button>
   </div>
-  <script id="puzzle-data" type="application/json">{"number":2,"groups":[{"id":"eight-figures","name":"Eight Figures","cards":[{"id":"0bed0f9e-ec59-4e68-82c8-04589adc3448","src":"data/art/0bed0f9e-ec59-4e68-82c8-04589adc3448.jpg"},{"id":"d23ee00c-f300-4e22-b245-4239cc45be55","src":"data/art/d23ee00c-f300-4e22-b245-4239cc45be55.jpg"},{"id":"11812b67-d255-4582-891c-a3e12349881a","src":"data/art/11812b67-d255-4582-891c-a3e12349881a.jpg"},{"id":"ba8aa766-530d-4c24-b274-facc7a634102","src":"data/art/ba8aa766-530d-4c24-b274-facc7a634102.jpg"}]},{"id":"electric-guitar","name":"Electric Guitar","cards":[{"id":"bdd9dc23-2519-41f4-9613-93221adaac66","src":"data/art/bdd9dc23-2519-41f4-9613-93221adaac66.jpg"},{"id":"03e6479f-0d9f-431c-b6fa-6a6544f98440","src":"data/art/03e6479f-0d9f-431c-b6fa-6a6544f98440.jpg"},{"id":"bbce166f-9ce4-4342-a533-c4c57456a2bf","src":"data/art/bbce166f-9ce4-4342-a533-c4c57456a2bf.jpg"},{"id":"e0529f04-7399-49a1-a72f-80876de27e28","src":"data/art/e0529f04-7399-49a1-a72f-80876de27e28.jpg"}]},{"id":"elephant","name":"Elephant","cards":[{"id":"021eecb1-5a4a-4bb7-be48-f2fd87e433f0","src":"data/art/021eecb1-5a4a-4bb7-be48-f2fd87e433f0.jpg"},{"id":"7261a641-1d08-4786-91a2-7216a22b9a12","src":"data/art/7261a641-1d08-4786-91a2-7216a22b9a12.jpg"},{"id":"b79ba742-3835-45a6-b2fe-f98381dd0bf1","src":"data/art/b79ba742-3835-45a6-b2fe-f98381dd0bf1.jpg"},{"id":"5429f243-98ec-41d2-bdb8-330fd3ef7233","src":"data/art/5429f243-98ec-41d2-bdb8-330fd3ef7233.jpg"}]},{"id":"engine","name":"Engine","cards":[{"id":"572a46be-e43c-4ab9-9309-2b9ae79f99aa","src":"data/art/572a46be-e43c-4ab9-9309-2b9ae79f99aa.jpg"},{"id":"3c55c193-82f5-441f-a511-297696fb6196","src":"data/art/3c55c193-82f5-441f-a511-297696fb6196.jpg"},{"id":"19f7bc4a-9a50-405e-ae64-f4aac280ed84","src":"data/art/19f7bc4a-9a50-405e-ae64-f4aac280ed84.jpg"},{"id":"4ce8cd32-253e-4557-9391-39c3a4e2c5aa","src":"data/art/4ce8cd32-253e-4557-9391-39c3a4e2c5aa.jpg"}]}]}</script>
+  <script id="puzzle-data" type="application/json">{"label":"Hell","groups":[{"id":"chess","name":"Chess","note":"(Knight, Bishop, Queen, King)","cards":[{"id":"chess-1","src":"data/hellart/chess-1.jpg"},{"id":"chess-2","src":"data/hellart/chess-2.jpg"},{"id":"chess-3","src":"data/hellart/chess-3.jpg"},{"id":"chess-4","src":"data/hellart/chess-4.jpg"}]},{"id":"feathers","name":"Feathers","cards":[{"id":"feather-1","src":"data/hellart/feather-1.jpg"},{"id":"feather-2","src":"data/hellart/feather-2.jpg"},{"id":"feather-3","src":"data/hellart/feather-3.jpg"},{"id":"feather-4","src":"data/hellart/feather-4.jpg"}]},{"id":"metal","name":"Metal","note":"(Copper, Bronze, Silver, Gold)","cards":[{"id":"metal-1","src":"data/hellart/metal-1.jpg"},{"id":"metal-2","src":"data/hellart/metal-2.jpg"},{"id":"metal-3","src":"data/hellart/metal-3.jpg"},{"id":"gold-4","src":"data/hellart/gold-4.jpg"}]},{"id":"secrets","name":"Secrets","cards":[{"id":"secret-1","src":"data/hellart/secret-1.jpg"},{"id":"secret-2","src":"data/hellart/secret-2.jpg"},{"id":"secret-3","src":"data/hellart/secret-3.jpg"},{"id":"secret-4","src":"data/hellart/secret-4.jpg"}]}]}</script>
   <script>
 const puzzle = JSON.parse(document.getElementById("puzzle-data").textContent);
 

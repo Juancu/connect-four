@@ -1,5 +1,6 @@
 import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { buildHell } from "./build-hell.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 
@@ -136,3 +137,4 @@ for (const entry of await readdir(siteDir, { withFileTypes: true })) {
 const names = puzzles.get(currentNumber).map((group) => group.name).join(", ");
 console.log(`Wrote daily ${String(currentNumber).padStart(3, "0")} (${names}). Earlier dailies: ${numbers.filter((number) => number !== currentNumber).join(", ") || "none"}.`);
 if (!clientId) console.log("No Discord client id yet. Add it to data/discord.json and run npm run daily again.");
+await buildHell();

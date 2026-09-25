@@ -35,6 +35,7 @@ const SUSPENSE_MS = 480;
 const SHAKE_MS = 800;
 const FLY_MS = 780;
 const puzzleNumber = String(puzzle.number ?? 1).padStart(3, "0");
+const puzzleLabel = puzzle.label || `Puzzle #${puzzleNumber}`;
 const categoryEmoji = ["🟩", "🟦", "🟨", "🟪"];
 let mistakes = 0;
 let ended = false;
@@ -104,7 +105,7 @@ function emojiFor(id) {
 
 function resultsText() {
   const rows = guesses.map((guess) => guess.map(emojiFor).join("")).join("\n");
-  return `Tagger Connections\nPuzzle #${puzzleNumber}\n${rows}`;
+  return `Tagger Connections\n${puzzleLabel}\n${rows}`;
 }
 
 function render({ pendingTitleId = null } = {}) {
@@ -129,6 +130,12 @@ function render({ pendingTitleId = null } = {}) {
     }
     const title = document.createElement("strong");
     title.textContent = group.name;
+    if (group.note) {
+      const note = document.createElement("span");
+      note.className = "solved-note";
+      note.textContent = group.note;
+      title.append(note);
+    }
     if (groupId === pendingTitleId) title.setAttribute("aria-hidden", "true");
     row.append(title);
     solvedRows.append(row);
@@ -271,7 +278,7 @@ document.querySelector(".zoom-next").addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  if (!infoLayer.hidden && event.key === "Escape") {
+  if (infoLayer && !infoLayer.hidden && event.key === "Escape") {
     closeInfo();
     return;
   }
@@ -585,7 +592,7 @@ function setFinished(on) {
 }
 
 function openResults() {
-  resultsNumber.textContent = `Puzzle #${puzzleNumber}`;
+  resultsNumber.textContent = puzzleLabel;
   resultsGrid.textContent = guesses.map((guess) => guess.map(emojiFor).join("")).join("\n");
   copiedNote.classList.remove("is-shown");
   resultsLayer.hidden = false;
@@ -633,7 +640,7 @@ function closeInfo() {
   infoLayer.hidden = true;
 }
 
-document.querySelector("#info").addEventListener("click", openInfo);
+document.querySelector("#info")?.addEventListener("click", openInfo);
 document.querySelector("#info-close").addEventListener("click", closeInfo);
 infoLayer.addEventListener("click", (event) => {
   if (event.target === infoLayer) closeInfo();
