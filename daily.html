@@ -419,6 +419,43 @@
       cursor: pointer;
     }
 
+    .puzzle-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .puzzle-nav a,
+    .puzzle-nav span {
+      padding: 4px 12px;
+    }
+
+    .puzzle-nav a {
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .puzzle-nav a:hover,
+    .puzzle-nav a:focus-visible {
+      color: var(--gold);
+    }
+
+    .puzzle-nav span {
+      color: var(--gold);
+      font-weight: 750;
+    }
+
+    .puzzle-nav a + span,
+    .puzzle-nav span + a,
+    .puzzle-nav a + a {
+      border-left: 1px solid var(--line);
+    }
+
     #submit:not(:disabled),
     #results,
     #share {
@@ -563,6 +600,7 @@
       <button type="button" id="submit" disabled>Submit</button>
       <button type="button" id="results" hidden>View Results</button>
     </div>
+    <nav class="puzzle-nav" aria-label="Puzzles"><a href="site/2/index.html">‹ Previous</a><span>Puzzle #4</span></nav>
     <footer>Random puzzle: puzzle.html</footer>
   </main>
   <div id="info-layer" hidden>
@@ -590,7 +628,7 @@
     <img alt="">
     <button type="button" class="zoom-next" aria-label="Next picture">›</button>
   </div>
-  <script id="puzzle-data" type="application/json">{"number":2,"groups":[{"id":"eight-figures","name":"Eight Figures","cards":[{"id":"0bed0f9e-ec59-4e68-82c8-04589adc3448","src":"data/art/0bed0f9e-ec59-4e68-82c8-04589adc3448.jpg"},{"id":"d23ee00c-f300-4e22-b245-4239cc45be55","src":"data/art/d23ee00c-f300-4e22-b245-4239cc45be55.jpg"},{"id":"11812b67-d255-4582-891c-a3e12349881a","src":"data/art/11812b67-d255-4582-891c-a3e12349881a.jpg"},{"id":"ba8aa766-530d-4c24-b274-facc7a634102","src":"data/art/ba8aa766-530d-4c24-b274-facc7a634102.jpg"}]},{"id":"electric-guitar","name":"Electric Guitar","cards":[{"id":"bdd9dc23-2519-41f4-9613-93221adaac66","src":"data/art/bdd9dc23-2519-41f4-9613-93221adaac66.jpg"},{"id":"03e6479f-0d9f-431c-b6fa-6a6544f98440","src":"data/art/03e6479f-0d9f-431c-b6fa-6a6544f98440.jpg"},{"id":"bbce166f-9ce4-4342-a533-c4c57456a2bf","src":"data/art/bbce166f-9ce4-4342-a533-c4c57456a2bf.jpg"},{"id":"e0529f04-7399-49a1-a72f-80876de27e28","src":"data/art/e0529f04-7399-49a1-a72f-80876de27e28.jpg"}]},{"id":"elephant","name":"Elephant","cards":[{"id":"021eecb1-5a4a-4bb7-be48-f2fd87e433f0","src":"data/art/021eecb1-5a4a-4bb7-be48-f2fd87e433f0.jpg"},{"id":"7261a641-1d08-4786-91a2-7216a22b9a12","src":"data/art/7261a641-1d08-4786-91a2-7216a22b9a12.jpg"},{"id":"b79ba742-3835-45a6-b2fe-f98381dd0bf1","src":"data/art/b79ba742-3835-45a6-b2fe-f98381dd0bf1.jpg"},{"id":"5429f243-98ec-41d2-bdb8-330fd3ef7233","src":"data/art/5429f243-98ec-41d2-bdb8-330fd3ef7233.jpg"}]},{"id":"engine","name":"Engine","cards":[{"id":"572a46be-e43c-4ab9-9309-2b9ae79f99aa","src":"data/art/572a46be-e43c-4ab9-9309-2b9ae79f99aa.jpg"},{"id":"3c55c193-82f5-441f-a511-297696fb6196","src":"data/art/3c55c193-82f5-441f-a511-297696fb6196.jpg"},{"id":"19f7bc4a-9a50-405e-ae64-f4aac280ed84","src":"data/art/19f7bc4a-9a50-405e-ae64-f4aac280ed84.jpg"},{"id":"4ce8cd32-253e-4557-9391-39c3a4e2c5aa","src":"data/art/4ce8cd32-253e-4557-9391-39c3a4e2c5aa.jpg"}]}]}</script>
+  <script id="puzzle-data" type="application/json">{"number":4,"groups":[{"id":"crescent","name":"Crescent","cards":[{"id":"b14bab07-4c9c-460a-a73a-f6c4ed01636a","src":"data/art/b14bab07-4c9c-460a-a73a-f6c4ed01636a.jpg"},{"id":"7ca14c72-e2b6-4959-9e24-d83deeb54582","src":"data/art/7ca14c72-e2b6-4959-9e24-d83deeb54582.jpg"},{"id":"7be912bb-4afd-487c-aa89-78fa2cff8e60","src":"data/art/7be912bb-4afd-487c-aa89-78fa2cff8e60.jpg"},{"id":"20abf968-ec06-47b1-8997-28120308c335","src":"data/art/20abf968-ec06-47b1-8997-28120308c335.jpg"}]},{"id":"dabbing","name":"Dabbing","cards":[{"id":"5d528510-f27a-4e28-9492-1743fdcbaf6e","src":"data/art/5d528510-f27a-4e28-9492-1743fdcbaf6e.jpg"},{"id":"e3d10c15-cdcd-44fc-8a92-428fefb73167","src":"data/art/e3d10c15-cdcd-44fc-8a92-428fefb73167.jpg"},{"id":"491cc3c6-52c6-4938-9387-8a168794ce43","src":"data/art/491cc3c6-52c6-4938-9387-8a168794ce43.jpg"},{"id":"1311e0dd-56ba-40af-b173-b06915182001","src":"data/art/1311e0dd-56ba-40af-b173-b06915182001.jpg"}]},{"id":"duel","name":"Duel","cards":[{"id":"988bcbd2-6774-478f-9e0f-411c6ca296f4","src":"data/art/988bcbd2-6774-478f-9e0f-411c6ca296f4.jpg"},{"id":"e8b84c96-06d1-474b-a324-403d0c5a5e30","src":"data/art/e8b84c96-06d1-474b-a324-403d0c5a5e30.jpg"},{"id":"5de809a1-34f1-44ef-856d-dc2fa1db6b98","src":"data/art/5de809a1-34f1-44ef-856d-dc2fa1db6b98.jpg"},{"id":"246fa6e1-8cfc-4fdf-b98f-b16eaf89716c","src":"data/art/246fa6e1-8cfc-4fdf-b98f-b16eaf89716c.jpg"}]},{"id":"egg","name":"Egg","cards":[{"id":"a87a6a4d-4e0d-44e8-8a44-db0840967470","src":"data/art/a87a6a4d-4e0d-44e8-8a44-db0840967470.jpg"},{"id":"63729377-2ef4-46f2-ba53-4d65000b431e","src":"data/art/63729377-2ef4-46f2-ba53-4d65000b431e.jpg"},{"id":"00e35e46-a4f1-4d2b-b081-4b3685f4ba96","src":"data/art/00e35e46-a4f1-4d2b-b081-4b3685f4ba96.jpg"},{"id":"29d02cbd-4333-4c76-a164-1d7c35bd43c7","src":"data/art/29d02cbd-4333-4c76-a164-1d7c35bd43c7.jpg"}]}]}</script>
   <script>
 const puzzle = JSON.parse(document.getElementById("puzzle-data").textContent);
 

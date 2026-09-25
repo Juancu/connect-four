@@ -48,6 +48,7 @@ function page(template, client, prefix) {
     .replace("<h1>connectTag</h1>", "")
     .replace(intro, "")
     .replace("Another puzzle: npm run puzzle", "")
+    .replace("__NAV__", () => "")
     .replace("__DISCORD__", () => "");
 }
 

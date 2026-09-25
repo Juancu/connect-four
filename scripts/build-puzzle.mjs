@@ -165,6 +165,7 @@ async function writePuzzle(puzzle) {
   const html = template
     .replace("__PUZZLE_DATA__", () => data)
     .replace("/*__CLIENT__*/", () => client)
+    .replace("__NAV__", () => "")
     .replace("__DISCORD__", () => "");
   await writeFile(path.join(ROOT, "puzzle.html"), html);
   console.log(`Puzzle groups: ${puzzle.groups.map((group) => group.name).join(", ")}`);

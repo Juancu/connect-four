@@ -8,14 +8,26 @@ function displayName(name) {
   return name.replace(/\p{L}+/gu, (word) => word.charAt(0).toUpperCase() + word.slice(1));
 }
 
-function puzzleHtml({ groups, number, title, footer, discord }) {
+function puzzleHtml({ groups, number, title, footer, discord, nav }) {
   return template
     .replace("__PUZZLE_DATA__", () => JSON.stringify({ number, groups }).replace(/</g, "\\u003c"))
     .replace("/*__CLIENT__*/", () => client)
     .replace("<title>connectTag puzzle</title>", `<title>${title}</title>`)
     .replace("<h1>connectTag</h1>", "")
     .replace("Another puzzle: npm run puzzle", footer)
+    .replace("__NAV__", () => nav)
     .replace("__DISCORD__", () => discord);
+}
+
+function puzzleNav(number, hrefFor) {
+  const index = numbers.indexOf(number);
+  const previous = index > 0 ? numbers[index - 1] : null;
+  const next = index < numbers.length - 1 ? numbers[index + 1] : null;
+  const parts = [];
+  if (previous) parts.push(`<a href="${hrefFor(previous)}">‹ Previous</a>`);
+  parts.push(`<span>Puzzle #${number}</span>`);
+  if (next) parts.push(`<a href="${hrefFor(next)}">Next ›</a>`);
+  return `<nav class="puzzle-nav" aria-label="Puzzles">${parts.join("")}</nav>`;
 }
 
 function groupsFrom(daily) {
@@ -87,6 +99,7 @@ await writeFile(path.join(root, "daily.html"), puzzleHtml({
   title: "connectTag daily",
   footer: "Random puzzle: puzzle.html",
   discord: "",
+  nav: puzzleNav(currentNumber, (n) => `site/${n}/index.html`),
 }));
 await writeFile(path.join(root, "data", "daily.json"), await readFile(path.join(dailiesDir, `${currentNumber}.json`)));
 
@@ -113,6 +126,7 @@ await writeFile(path.join(root, "site", "index.html"), puzzleHtml({
   title: "connectTag daily",
   footer: "",
   discord,
+  nav: puzzleNav(currentNumber, (n) => `${n}/`),
 }));
 
 for (const number of numbers) {
@@ -124,6 +138,7 @@ for (const number of numbers) {
     title: `connectTag #${String(number).padStart(3, "0")}`,
     footer: "",
     discord: number === currentNumber ? discord : "",
+    nav: puzzleNav(number, (n) => `../${n}/`),
   }));
 }
 

@@ -419,6 +419,43 @@
       cursor: pointer;
     }
 
+    .puzzle-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .puzzle-nav a,
+    .puzzle-nav span {
+      padding: 4px 12px;
+    }
+
+    .puzzle-nav a {
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .puzzle-nav a:hover,
+    .puzzle-nav a:focus-visible {
+      color: var(--gold);
+    }
+
+    .puzzle-nav span {
+      color: var(--gold);
+      font-weight: 750;
+    }
+
+    .puzzle-nav a + span,
+    .puzzle-nav span + a,
+    .puzzle-nav a + a {
+      border-left: 1px solid var(--line);
+    }
+
     #submit:not(:disabled),
     #results,
     #share {
@@ -563,6 +600,7 @@
       <button type="button" id="submit" disabled>Submit</button>
       <button type="button" id="results" hidden>View Results</button>
     </div>
+    <nav class="puzzle-nav" aria-label="Puzzles"><a href="../1/">‹ Previous</a><span>Puzzle #2</span><a href="../4/">Next ›</a></nav>
     <footer></footer>
   </main>
   <div id="info-layer" hidden>
