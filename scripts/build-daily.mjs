@@ -5,6 +5,7 @@ import { buildHell } from "./build-hell.mjs";
 const root = path.resolve(import.meta.dirname, "..");
 
 function displayName(name) {
+  if (/\p{Lu}/u.test(name)) return name;
   return name.replace(/\p{L}+/gu, (word) => word.charAt(0).toUpperCase() + word.slice(1));
 }
 
