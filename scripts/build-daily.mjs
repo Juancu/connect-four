@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { access, copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { buildHell } from "./build-hell.mjs";
 
@@ -94,7 +94,7 @@ function withSources(groups, prefix) {
 
 const current = puzzles.get(currentNumber);
 await writeFile(path.join(root, "daily.html"), puzzleHtml({
-  groups: withSources(current, "data/art/"),
+  groups: withSources(current, "site/images/"),
   number: currentNumber,
   title: "connectTag daily",
   footer: "Random puzzle: puzzle.html",
@@ -104,19 +104,23 @@ await writeFile(path.join(root, "daily.html"), puzzleHtml({
 await writeFile(path.join(root, "data", "daily.json"), await readFile(path.join(dailiesDir, `${currentNumber}.json`)));
 
 const siteImages = path.join(root, "site", "images");
-await rm(siteImages, { recursive: true, force: true });
 await mkdir(siteImages, { recursive: true });
-const copied = new Set();
+const needed = new Set();
 for (const groups of puzzles.values()) {
   for (const group of groups) {
-    for (const card of group.cards) {
-      if (copied.has(card.id)) continue;
-      copied.add(card.id);
-      await copyFile(
-        path.join(root, "data", "art", `${card.id}.jpg`),
-        path.join(siteImages, `${card.id}.jpg`),
-      );
-    }
+    for (const card of group.cards) needed.add(card.id);
+  }
+}
+for (const name of await readdir(siteImages)) {
+  if (!needed.has(name.replace(/\.jpg$/, ""))) await rm(path.join(siteImages, name));
+}
+for (const id of needed) {
+  const dest = path.join(siteImages, `${id}.jpg`);
+  try {
+    await copyFile(path.join(root, "data", "art", `${id}.jpg`), dest);
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    await access(dest);
   }
 }
 

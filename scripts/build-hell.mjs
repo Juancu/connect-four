@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -63,7 +63,13 @@ export async function buildHell() {
   await mkdir(imageDir, { recursive: true });
   for (const group of groups) {
     for (const id of group.images) {
-      await copyFile(path.join(artDir, `${id}.jpg`), path.join(imageDir, `${id}.jpg`));
+      const dest = path.join(imageDir, `${id}.jpg`);
+      try {
+        await copyFile(path.join(artDir, `${id}.jpg`), dest);
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+        await access(dest);
+      }
     }
   }
   await writeFile(path.join(root, "site", "hell", "index.html"), page(template, client, "images/"));
