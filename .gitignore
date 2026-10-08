@@ -3,3 +3,5 @@ data/tags.checkpoint.json
 data/art/
 data/hellart/
 puzzle/images/
+# Invite games stay on this computer until they are published on purpose.
+site/game*/
