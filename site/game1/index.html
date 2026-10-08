@@ -469,6 +469,15 @@
 
     .penalty.is-used { color: var(--red); }
 
+    .last-chance {
+      margin: 6px 0 0;
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .last-chance[hidden] { display: none; }
+
     .dot {
       position: relative;
       width: 28px;
@@ -709,6 +718,7 @@
         <button type="button" class="dot" aria-label="Mistake 3"></button>
         <button type="button" class="dot" aria-label="Mistake 4"></button>
       </span>
+      <p id="last-chance" class="last-chance" hidden>Last Chance!</p>
     </div>
     <div class="actions">
       <button type="button" id="shuffle">Shuffle</button>
@@ -744,7 +754,7 @@
     <img alt="">
     <button type="button" class="zoom-next" aria-label="Next picture">›</button>
   </div>
-  <script id="puzzle-data" type="application/json">{"mode":"game","title":"Game 1","browseSeconds":50,"passwordHash":"1dccadfba3d385c9732d80c82b2d3f1c6ae5c025ddc8983293f054844ce3a047","a":" )kwdb'iHMdnDX9Keg--H5fJI6i9SFGV8BclqZAqCIvB,YwhNzLEkNS'3urpUUKW2Pat(4 c1zQ46ymjTP1o7fuR2)mL087T5VO(CaDRjoZOYx,vEy0hngAW.epMGFbxXtl3r.sJsQ","groups":[{"id":"0","name":[43,83,46],"note":[68,58,7,5,5,83,11,89],"cards":[{"id":"d3154e82-3497-47ad-99e5-369cb40ac869","src":"images/d3154e82-3497-47ad-99e5-369cb40ac869.jpg"},{"id":"cfbdaae3-acba-44e1-bdd6-9c7066143d33","src":"images/cfbdaae3-acba-44e1-bdd6-9c7066143d33.jpg"},{"id":"c3f9b454-97e9-4c77-b37a-e974221ae385","src":"images/c3f9b454-97e9-4c77-b37a-e974221ae385.jpg"},{"id":"f020aa2f-cc1b-4bb4-bf05-4050ea935d66","src":"images/f020aa2f-cc1b-4bb4-bf05-4050ea935d66.jpg"}]},{"id":"1","name":[95,101,126,35,16,67],"cards":[{"id":"a6bf1525-2212-46d0-ad4d-1dbaa2e3b3cd","src":"images/a6bf1525-2212-46d0-ad4d-1dbaa2e3b3cd.jpg"},{"id":"30935e4a-013e-4c46-ad05-304df8e5dfa4","src":"images/30935e4a-013e-4c46-ad05-304df8e5dfa4.jpg"},{"id":"423623dd-b80a-49ac-a65d-af8ed0045a46","src":"images/423623dd-b80a-49ac-a65d-af8ed0045a46.jpg"},{"id":"1b19cad0-5754-4625-8303-c8310bc7cbd5","src":"images/1b19cad0-5754-4625-8303-c8310bc7cbd5.jpg"}]},{"id":"2","name":[125,26,58,121,3,83,58,2,134],"cards":[{"id":"1befdfc7-a1e3-4a2a-ad68-7d0fee170f3f","src":"images/1befdfc7-a1e3-4a2a-ad68-7d0fee170f3f.jpg"},{"id":"1fed38d0-c32c-440c-9d99-ca3b48a34791","src":"images/1fed38d0-c32c-440c-9d99-ca3b48a34791.jpg"},{"id":"a7d0d849-d400-43fc-a42a-0eeb27131d1b","src":"images/a7d0d849-d400-43fc-a42a-0eeb27131d1b.jpg"},{"id":"0c9a7cb0-5bff-48ff-b620-2838816ac9b5","src":"images/0c9a7cb0-5bff-48ff-b620-2838816ac9b5.jpg"}]},{"id":"3","name":[87,7,11,17],"cards":[{"id":"0b7726e1-f121-4283-9c54-66509f332f39","src":"images/0b7726e1-f121-4283-9c54-66509f332f39.jpg"},{"id":"1f3013bf-9647-4bdb-a638-d299ae00f88e","src":"images/1f3013bf-9647-4bdb-a638-d299ae00f88e.jpg"},{"id":"b5fe776d-00c2-4d5d-9493-77dd754aa728","src":"images/b5fe776d-00c2-4d5d-9493-77dd754aa728.jpg"},{"id":"d74e4ed4-4470-4b3b-98cd-e4a8660b9768","src":"images/d74e4ed4-4470-4b3b-98cd-e4a8660b9768.jpg"}]}]}</script>
+  <script id="puzzle-data" type="application/json">{"mode":"game","title":"Game 1","browseSeconds":50,"passwordHash":"1dccadfba3d385c9732d80c82b2d3f1c6ae5c025ddc8983293f054844ce3a047","a":"Fy0'ap5L3Byh658jgCd,',N)siSRY4AUE160DQhv (EtSDFaZzM-z V7WRX9JTo8iQHpdx2-.AGJIVe4TlNl(KngncOImmfOPUeZk1wsX7BkqbxPufcobKru)3CGt.2wvq9rWLHYjM","groups":[{"id":"0","name":[106,115,127],"note":[41,118,64,116,116,115,86,120],"cards":[{"id":"d3154e82-3497-47ad-99e5-369cb40ac869","src":"images/d3154e82-3497-47ad-99e5-369cb40ac869.jpg"},{"id":"cfbdaae3-acba-44e1-bdd6-9c7066143d33","src":"images/cfbdaae3-acba-44e1-bdd6-9c7066143d33.jpg"},{"id":"c3f9b454-97e9-4c77-b37a-e974221ae385","src":"images/c3f9b454-97e9-4c77-b37a-e974221ae385.jpg"},{"id":"f020aa2f-cc1b-4bb4-bf05-4050ea935d66","src":"images/f020aa2f-cc1b-4bb4-bf05-4050ea935d66.jpg"}]},{"id":"1","name":[80,47,116,83,98,43],"cards":[{"id":"a6bf1525-2212-46d0-ad4d-1dbaa2e3b3cd","src":"images/a6bf1525-2212-46d0-ad4d-1dbaa2e3b3cd.jpg"},{"id":"30935e4a-013e-4c46-ad05-304df8e5dfa4","src":"images/30935e4a-013e-4c46-ad05-304df8e5dfa4.jpg"},{"id":"423623dd-b80a-49ac-a65d-af8ed0045a46","src":"images/423623dd-b80a-49ac-a65d-af8ed0045a46.jpg"},{"id":"1b19cad0-5754-4625-8303-c8310bc7cbd5","src":"images/1b19cad0-5754-4625-8303-c8310bc7cbd5.jpg"}]},{"id":"2","name":[0,64,131,78,102,115,131,100,24],"cards":[{"id":"1befdfc7-a1e3-4a2a-ad68-7d0fee170f3f","src":"images/1befdfc7-a1e3-4a2a-ad68-7d0fee170f3f.jpg"},{"id":"1fed38d0-c32c-440c-9d99-ca3b48a34791","src":"images/1fed38d0-c32c-440c-9d99-ca3b48a34791.jpg"},{"id":"a7d0d849-d400-43fc-a42a-0eeb27131d1b","src":"images/a7d0d849-d400-43fc-a42a-0eeb27131d1b.jpg"},{"id":"0c9a7cb0-5bff-48ff-b620-2838816ac9b5","src":"images/0c9a7cb0-5bff-48ff-b620-2838816ac9b5.jpg"}]},{"id":"3","name":[57,25,86,87],"cards":[{"id":"0b7726e1-f121-4283-9c54-66509f332f39","src":"images/0b7726e1-f121-4283-9c54-66509f332f39.jpg"},{"id":"1f3013bf-9647-4bdb-a638-d299ae00f88e","src":"images/1f3013bf-9647-4bdb-a638-d299ae00f88e.jpg"},{"id":"b5fe776d-00c2-4d5d-9493-77dd754aa728","src":"images/b5fe776d-00c2-4d5d-9493-77dd754aa728.jpg"},{"id":"d74e4ed4-4470-4b3b-98cd-e4a8660b9768","src":"images/d74e4ed4-4470-4b3b-98cd-e4a8660b9768.jpg"}]}]}</script>
   <script>
 const puzzle = JSON.parse(document.getElementById("puzzle-data").textContent);
 
@@ -1183,6 +1193,8 @@ function paintDots() {
     dot.setAttribute("aria-label", attempt?.close ? "Show the near miss" : attempt ? `Show mistake ${index + 1}` : `Mistake ${index + 1}${penaltyNote}`);
     dot.parentElement?.querySelector(".penalty")?.classList.toggle("is-used", index < mistakes);
   });
+  const lastChance = document.querySelector("#last-chance");
+  if (lastChance) lastChance.hidden = puzzle.mode !== "game" || mistakes < 4;
   closeTip.hidden = !attempts[recallIndex]?.close;
 }
 

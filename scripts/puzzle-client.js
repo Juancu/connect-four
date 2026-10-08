@@ -435,6 +435,8 @@ function paintDots() {
     dot.setAttribute("aria-label", attempt?.close ? "Show the near miss" : attempt ? `Show mistake ${index + 1}` : `Mistake ${index + 1}${penaltyNote}`);
     dot.parentElement?.querySelector(".penalty")?.classList.toggle("is-used", index < mistakes);
   });
+  const lastChance = document.querySelector("#last-chance");
+  if (lastChance) lastChance.hidden = puzzle.mode !== "game" || mistakes < 4;
   closeTip.hidden = !attempts[recallIndex]?.close;
 }
 

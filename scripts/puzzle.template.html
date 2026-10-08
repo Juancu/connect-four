@@ -469,6 +469,15 @@
 
     .penalty.is-used { color: var(--red); }
 
+    .last-chance {
+      margin: 6px 0 0;
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .last-chance[hidden] { display: none; }
+
     .dot {
       position: relative;
       width: 28px;
@@ -709,6 +718,7 @@
         <button type="button" class="dot" aria-label="Mistake 3"></button>
         <button type="button" class="dot" aria-label="Mistake 4"></button>
       </span>
+      <p id="last-chance" class="last-chance" hidden>Last Chance!</p>
     </div>
     <div class="actions">
       <button type="button" id="shuffle">Shuffle</button>
