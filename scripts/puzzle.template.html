@@ -45,6 +45,83 @@
       text-align: center;
     }
 
+    .timer {
+      display: grid;
+      align-items: center;
+      min-height: 56px;
+      margin: 0 0 14px;
+      text-align: center;
+      font-size: clamp(20px, 5vw, 28px);
+      font-weight: 750;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer.is-browse {
+      color: #62d26f;
+      font-size: clamp(15px, 3.5vw, 20px);
+      line-height: 1.35;
+    }
+
+    .timer.is-browse.is-late { color: var(--gold); }
+
+    #gate {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    #gate[hidden] { display: none; }
+
+    .gate-card {
+      width: min(420px, 100%);
+      padding: 28px 22px 22px;
+      border-radius: 16px;
+      background: #221f1b;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      text-align: center;
+    }
+
+    .gate-card h1 { margin-bottom: 8px; }
+
+    .gate-card p { margin: 0 0 14px; color: var(--muted); }
+
+    #gate-note {
+      min-height: 1.4em;
+      margin: 12px 0 0;
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .gate-card input {
+      width: 100%;
+      height: 46px;
+      margin: 0 0 12px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--ink);
+      font: inherit;
+      text-align: center;
+    }
+
+    .gate-card button {
+      min-width: 140px;
+      height: 42px;
+      padding: 0 18px;
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      background: var(--gold);
+      color: #1c160b;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    main[hidden] { display: none !important; }
+
     .info {
       display: inline-grid;
       place-items: center;
@@ -368,6 +445,30 @@
 
     .dots { display: flex; gap: 2px; }
 
+    .mistakes.is-game {
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mistakes.is-game .dots { gap: 12px; }
+
+    .dot-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 36px;
+    }
+
+    .penalty {
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .penalty.is-used { color: var(--red); }
+
     .dot {
       position: relative;
       width: 28px;
@@ -520,6 +621,16 @@
       letter-spacing: -0.03em;
     }
 
+    .score {
+      display: grid;
+      gap: 4px;
+      margin: 14px 0 0;
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .results-grid[hidden] { display: none; }
+
     .results-grid {
       margin: 16px 0 18px;
       font-size: 28px;
@@ -570,10 +681,20 @@
   </style>
 </head>
 <body>
+  <div id="gate" hidden>
+    <form id="gate-form" class="gate-card">
+      <h1 id="gate-title">Game</h1>
+      <p>Enter the password to see the pictures.</p>
+      <input id="password" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Password" required>
+      <button type="submit">Enter</button>
+      <p id="gate-note" role="status"></p>
+    </form>
+  </div>
   <p id="toast" class="notice" hidden></p>
   <main>
     <h1>connectTag</h1>
     <p class="intro">Group four arts that share a Scryfall art tag. <button type="button" class="info" id="info" aria-label="More information">i</button></p>
+    <p id="timer" class="timer" role="timer" aria-live="polite" hidden></p>
     <p id="message" role="status"></p>
     <div id="board">
       <div id="solved"></div>
@@ -581,7 +702,7 @@
     </div>
     <div class="mistakes">
       <p id="close-tip" class="notice notice-above" hidden>So close! Three are matching!</p>
-      <span>Mistakes remaining</span>
+      <span id="mistakes-label">Mistakes remaining</span>
       <span class="dots">
         <button type="button" class="dot" aria-label="Mistake 1"></button>
         <button type="button" class="dot" aria-label="Mistake 2"></button>
@@ -610,6 +731,7 @@
     <div class="results-card" role="dialog" aria-modal="true" aria-labelledby="results-heading">
       <button type="button" class="results-close" aria-label="Close">×</button>
       <h2 id="results-heading">Tag Connections</h2>
+      <p id="score" class="score" hidden></p>
       <div class="results-grid"></div>
       <div class="share-wrap">
         <span class="copied" role="status">Copied to Clipboard!</span>
