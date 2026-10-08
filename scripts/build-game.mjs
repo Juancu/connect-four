@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -102,8 +102,8 @@ function encodeText(text, block) {
   });
 }
 
-function groupsFrom(game) {
-  if (!Array.isArray(game.groups) || game.groups.length !== 4) throw new Error("Game 1 needs exactly 4 categories.");
+function groupsFrom(game, number) {
+  if (!Array.isArray(game.groups) || game.groups.length !== 4) throw new Error(`Game ${number} needs exactly 4 categories.`);
   return game.groups.map((group) => {
     if (!group.slug || !group.name || !Array.isArray(group.images) || group.images.length !== 4) {
       throw new Error(`${group.name || "A category"} needs a slug, a name, and exactly 4 pictures.`);
@@ -117,7 +117,8 @@ function groupsFrom(game) {
   });
 }
 
-function page(template, client, groups, passwordHash, prefix) {
+function page(template, client, groups, passwordHash, prefix, number) {
+  const title = `Game ${number}`;
   const labels = groups.flatMap((group) => (group.note ? [group.name, group.note] : [group.name]));
   const letters = letterBlock(labels);
   const hiddenGroups = groups.map((group, index) => {
@@ -136,7 +137,7 @@ function page(template, client, groups, passwordHash, prefix) {
   });
   const data = JSON.stringify({
     mode: "game",
-    title: "Game 1",
+    title,
     browseSeconds: 50,
     passwordHash,
     a: letters,
@@ -145,9 +146,9 @@ function page(template, client, groups, passwordHash, prefix) {
   return template
     .replace("__PUZZLE_DATA__", () => data)
     .replace("/*__CLIENT__*/", () => client)
-    .replace("<title>connectTag puzzle</title>", "<title>Game 1</title>")
+    .replace("<title>connectTag puzzle</title>", `<title>${title}</title>`)
     .replace("<h1>connectTag</h1>", "")
-    .replace('<h1 id="gate-title">Game</h1>', '<h1 id="gate-title">Game 1</h1>')
+    .replace('<h1 id="gate-title">Game</h1>', `<h1 id="gate-title">${title}</h1>`)
     .replace('<div id="gate" hidden>', '<div id="gate">')
     .replace("<main>", "<main hidden>")
     .replace(intro, "Find 4 groups of 4 pictures.")
@@ -156,15 +157,16 @@ function page(template, client, groups, passwordHash, prefix) {
     .replace("__DISCORD__", () => "");
 }
 
-export async function buildGame() {
-  const game = JSON.parse(await readFile(path.join(root, "data", "games", "1.json"), "utf8"));
+async function buildOne(number, template, client) {
+  const file = path.join(root, "data", "games", `${number}.json`);
+  const game = JSON.parse(await readFile(file, "utf8"));
   const password = String(game.password ?? "").trim();
-  if (!password) throw new Error("Set a password in data/games/1.json.");
-  const groups = groupsFrom(game);
+  if (!password) throw new Error(`Set a password in data/games/${number}.json.`);
+  const groups = groupsFrom(game, number);
   const ids = groups.flatMap((group) => group.cards.map((card) => card.id));
-  if (new Set(ids).size !== ids.length) throw new Error("Game 1 repeats a picture.");
+  if (new Set(ids).size !== ids.length) throw new Error(`Game ${number} repeats a picture.`);
 
-  const imageDir = path.join(root, "site", "game1", "images");
+  const imageDir = path.join(root, "site", `game${number}`, "images");
   await mkdir(imageDir, { recursive: true });
   for (const id of ids) {
     const dest = path.join(imageDir, `${id}.jpg`);
@@ -174,15 +176,27 @@ export async function buildGame() {
     await sleep(120);
   }
 
+  const passwordHash = createHash("sha256").update(password.toLowerCase(), "utf8").digest("hex");
+  const slug = `game${number}`;
+  await writeFile(path.join(root, `${slug}.html`), page(template, client, groups, passwordHash, `site/${slug}/images/`, number));
+  await writeFile(path.join(root, "site", slug, "index.html"), page(template, client, groups, passwordHash, "images/", number));
+  const names = groups.map((group) => group.name).join(", ");
+  console.log(`Wrote /${slug} (${names}).`);
+}
+
+export async function buildGame() {
+  const gamesDir = path.join(root, "data", "games");
+  const numbers = (await readdir(gamesDir))
+    .map((name) => /^(\d+)\.json$/.exec(name)?.[1])
+    .filter(Boolean)
+    .map(Number)
+    .sort((a, b) => a - b);
+  if (!numbers.length) throw new Error("Add a game as data/games/1.json.");
   const [template, client] = await Promise.all([
     readFile(path.join(root, "scripts", "puzzle.template.html"), "utf8"),
     readFile(path.join(root, "scripts", "puzzle-client.js"), "utf8"),
   ]);
-  const passwordHash = createHash("sha256").update(password.toLowerCase(), "utf8").digest("hex");
-  await writeFile(path.join(root, "game1.html"), page(template, client, groups, passwordHash, "site/game1/images/"));
-  await writeFile(path.join(root, "site", "game1", "index.html"), page(template, client, groups, passwordHash, "images/"));
-  const names = groups.map((group) => group.name).join(", ");
-  console.log(`Wrote /game1 (${names}).`);
+  for (const number of numbers) await buildOne(number, template, client);
 }
 
 const invokedDirectly = process.argv[1]?.replaceAll("\\", "/").endsWith("scripts/build-game.mjs");
