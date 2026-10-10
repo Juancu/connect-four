@@ -4,7 +4,7 @@ import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
 const USER_AGENT = "connectTag/0.1 (personal Connections-style tag game; game artwork)";
-const intro = "Group four arts that share a Scryfall art tag.";
+const intro = "Find four groups of four related arts.";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -138,7 +138,7 @@ function page(template, client, groups, passwordHash, prefix, number) {
   const data = JSON.stringify({
     mode: "game",
     title,
-    browseSeconds: 50,
+    browseSeconds: 120,
     passwordHash,
     a: letters,
     groups: hiddenGroups,

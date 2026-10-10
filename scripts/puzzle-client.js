@@ -56,6 +56,7 @@ const shareTitle = puzzle.title
     ? "Tag Connections"
     : `Tag Connections #${String(puzzle.number).padStart(3, "0")}`;
 const browseMs = (Number(puzzle.browseSeconds) > 0 ? Number(puzzle.browseSeconds) : 30) * 1000;
+let enteredPassword = "";
 let browsing = false;
 let browseStartedAt = 0;
 let clockAccumulated = 0;
@@ -183,17 +184,25 @@ function gameReport() {
   return lines;
 }
 
+function mixColor(from, to, amount) {
+  const channel = (hex, index) => Number.parseInt(hex.slice(index, index + 2), 16);
+  const mix = (index) => Math.round(channel(from, index) + (channel(to, index) - channel(from, index)) * amount);
+  return `rgb(${mix(1)} ${mix(3)} ${mix(5)})`;
+}
+
 function paintTimer() {
   if (puzzle.mode !== "game" || timer.hidden) return;
   let browsingNow = browsing;
   if (browsing) {
     const left = browseMs - (performance.now() - browseStartedAt);
     if (left > 0) {
-      const secs = String(Math.ceil(left / 1000)).padStart(2, "0");
-      const next = `Browsing Time. (First guess available in: ${secs}s)`;
+      const leftSecs = Math.ceil(left / 1000);
+      const next = `2 Minutes Browsing Time (Guess in: ${leftSecs}s)`;
       if (timer.textContent !== next) timer.textContent = next;
       timer.classList.add("is-browse");
-      timer.classList.toggle("is-late", Number(secs) <= 10);
+      timer.classList.toggle("is-late", leftSecs <= 30 && leftSecs > 10);
+      timer.classList.toggle("is-urgent", leftSecs <= 10);
+      timer.style.color = leftSecs <= 10 ? mixColor("#ff8c1a", "#e23b2b", (10 - leftSecs) / 9) : "";
       if (!ended && !busy) submitButton.disabled = true;
       return;
     }
@@ -203,7 +212,8 @@ function paintTimer() {
   }
   const next = formatClock(elapsedMs());
   if (timer.textContent !== next) timer.textContent = next;
-  timer.classList.remove("is-browse", "is-late");
+  timer.classList.remove("is-browse", "is-late", "is-urgent");
+  timer.style.color = "";
   if (!ended && !busy) submitButton.disabled = browsingNow || selected.length !== 4;
   if (ended && clockTimer) {
     clearInterval(clockTimer);
@@ -211,9 +221,19 @@ function paintTimer() {
   }
 }
 
+function gameShare() {
+  const body = gameReport().join("\n");
+  const label = shareTitle.replace(/\s+/g, "");
+  const code = sha256Hex(`${body}\n${enteredPassword}`).slice(0, 6);
+  return { heading: `${label} Result-${code}`, body };
+}
+
 function resultsText() {
   const rows = guesses.map((guess) => guess.map(emojiFor).join("")).join("\n");
-  if (puzzle.mode === "game") return `${shareTitle}\n${gameReport().join("\n")}`;
+  if (puzzle.mode === "game") {
+    const share = gameShare();
+    return `${share.heading}\n${share.body}`;
+  }
   return `${shareTitle}\n${rows}`;
 }
 
@@ -730,7 +750,7 @@ function setFinished(on) {
 }
 
 function openResults() {
-  resultsHeading.textContent = shareTitle;
+  resultsHeading.textContent = puzzle.mode === "game" ? gameShare().heading : shareTitle;
   if (puzzle.mode === "game") {
     scoreText.hidden = false;
     scoreText.replaceChildren();
@@ -911,6 +931,7 @@ if (puzzle.mode === "game") {
       input.focus();
       return;
     }
+    enteredPassword = normalized;
     startGame();
   });
 } else {

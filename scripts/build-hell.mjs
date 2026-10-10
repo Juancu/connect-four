@@ -3,7 +3,7 @@ import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
 const artDir = path.join(root, "data", "hellart");
-const intro = '<p class="intro">Group four arts that share a Scryfall art tag. <button type="button" class="info" id="info" aria-label="More information">i</button></p>';
+const intro = '<p class="intro">Find four groups of four related arts. <button type="button" class="info" id="info" aria-label="More information">i</button></p>';
 
 const groups = [
   {
