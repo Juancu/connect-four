@@ -117,7 +117,7 @@ function groupsFrom(game, number) {
   });
 }
 
-function page(template, client, groups, passwordHash, prefix, number) {
+function page(template, client, groups, passwordHash, prefix, number, browseSeconds) {
   const title = `Game ${number}`;
   const labels = groups.flatMap((group) => (group.note ? [group.name, group.note] : [group.name]));
   const letters = letterBlock(labels);
@@ -138,7 +138,7 @@ function page(template, client, groups, passwordHash, prefix, number) {
   const data = JSON.stringify({
     mode: "game",
     title,
-    browseSeconds: 120,
+    browseSeconds,
     passwordHash,
     a: letters,
     groups: hiddenGroups,
@@ -177,9 +177,10 @@ async function buildOne(number, template, client) {
   }
 
   const passwordHash = createHash("sha256").update(password.toLowerCase(), "utf8").digest("hex");
+  const browseSeconds = Number(game.browseSeconds) > 0 ? Number(game.browseSeconds) : 120;
   const slug = `game${number}`;
-  await writeFile(path.join(root, `${slug}.html`), page(template, client, groups, passwordHash, `site/${slug}/images/`, number));
-  await writeFile(path.join(root, "site", slug, "index.html"), page(template, client, groups, passwordHash, "images/", number));
+  await writeFile(path.join(root, `${slug}.html`), page(template, client, groups, passwordHash, `site/${slug}/images/`, number, browseSeconds));
+  await writeFile(path.join(root, "site", slug, "index.html"), page(template, client, groups, passwordHash, "images/", number, browseSeconds));
   const names = groups.map((group) => group.name).join(", ");
   console.log(`Wrote /${slug} (${names}).`);
 }

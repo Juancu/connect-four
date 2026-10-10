@@ -1,5 +1,6 @@
 {
   "password": "jace",
+  "browseSeconds": 90,
   "groups": [
     {
       "slug": "bow",

@@ -190,6 +190,15 @@ function mixColor(from, to, amount) {
   return `rgb(${mix(1)} ${mix(3)} ${mix(5)})`;
 }
 
+function browseLabel() {
+  const total = Math.max(0, Math.round(browseMs / 1000));
+  if (total > 0 && total % 60 === 0) {
+    const minutes = total / 60;
+    return `${minutes} ${minutes === 1 ? "Minute" : "Minutes"} Browsing Time`;
+  }
+  return `${total} ${total === 1 ? "Second" : "Seconds"} Browsing Time`;
+}
+
 function paintTimer() {
   if (puzzle.mode !== "game" || timer.hidden) return;
   let browsingNow = browsing;
@@ -197,7 +206,7 @@ function paintTimer() {
     const left = browseMs - (performance.now() - browseStartedAt);
     if (left > 0) {
       const leftSecs = Math.ceil(left / 1000);
-      const next = `2 Minutes Browsing Time (Guess in: ${leftSecs}s)`;
+      const next = `${browseLabel()} (Guess in: ${leftSecs}s)`;
       if (timer.textContent !== next) timer.textContent = next;
       timer.classList.add("is-browse");
       timer.classList.toggle("is-late", leftSecs <= 30 && leftSecs > 10);
